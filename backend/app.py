@@ -30,8 +30,8 @@ CLASS_NAMES = ["glioma", "meningioma", "notumor", "pituitary"]
 # Heuristic thresholds for rejecting non-MRI images. Neither check needs an
 # extra model — MRI scans are effectively grayscale, and the classifier's
 # own confidence tends to collapse on genuinely out-of-distribution inputs.
-MAX_MEAN_SATURATION = 0.15  # 0-1 scale; real photos are usually well above this
-MIN_CONFIDENCE = 0.5        # reject if the top class isn't even the majority vote
+COLOR_PIXEL_FRACTION_THRESHOLD = 0.05  # reject if >5% of pixels have real color
+MIN_CONFIDENCE = 0.5                   # reject if the top class isn't even the majority vote
 
 # Only these origins may call this API from a browser. Add any preview/staging
 # Vercel URLs here too if you test against them.
@@ -59,11 +59,18 @@ app.add_middleware(
 model = None
 
 
-def mean_saturation(image: Image.Image) -> float:
-    """Average color saturation, 0 (pure grayscale) to 1 (fully saturated)."""
-    hsv = image.convert("HSV")
-    _, s, _ = hsv.split()
-    return float(np.array(s, dtype=np.float32).mean() / 255.0)
+def is_colorful(image: Image.Image, channel_diff_threshold: int = 12, pixel_fraction_threshold: float = 0.05) -> bool:
+    """
+    True if a meaningful fraction of pixels have real color (R, G, B genuinely
+    differ), rather than being grayscale. More robust than average saturation,
+    which can stay low even for real photos if much of the frame is neutral
+    (backgrounds, skin tones, etc.). Grayscale MRIs have R~=G~=B everywhere
+    (allowing a small threshold for JPEG compression noise).
+    """
+    arr = np.array(image, dtype=np.int16)  # RGB, shape (H, W, 3)
+    channel_diff = arr.max(axis=2) - arr.min(axis=2)
+    colorful_fraction = float((channel_diff > channel_diff_threshold).mean())
+    return colorful_fraction > pixel_fraction_threshold
 
 
 @app.on_event("startup")
@@ -100,8 +107,8 @@ async def predict(request: Request, file: UploadFile = File(...)):
 
     image = image.resize(IMG_SIZE)
 
-    saturation = mean_saturation(image)
-    if saturation > MAX_MEAN_SATURATION:
+    saturation = is_colorful(image, pixel_fraction_threshold=COLOR_PIXEL_FRACTION_THRESHOLD)
+    if saturation:
         raise HTTPException(
             status_code=422,
             detail=(

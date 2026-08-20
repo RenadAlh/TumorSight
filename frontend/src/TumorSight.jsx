@@ -183,7 +183,9 @@ async function realPredict(file, apiUrl) {
 export default function BrainTumorDemo() {
   const mountRef = useRef(null);
   const sceneRef = useRef({});
-  const [apiUrl, setApiUrl] = useState("");
+  const [apiUrl, setApiUrl] = useState(
+    "https://tumorsight-api.graysand-2feb18d0.centralindia.azurecontainerapps.io"
+  );
   const [showApiConfig, setShowApiConfig] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
   const [result, setResult] = useState(null);
