@@ -14,9 +14,12 @@ import io
 import os
 
 import numpy as np
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 from tensorflow.keras.models import load_model
 
 # --- Config -----------------------------------------------------------
@@ -30,15 +33,26 @@ CLASS_NAMES = ["glioma", "meningioma", "notumor", "pituitary"]
 MAX_MEAN_SATURATION = 0.15  # 0-1 scale; real photos are usually well above this
 MIN_CONFIDENCE = 0.5        # reject if the top class isn't even the majority vote
 
+# Only these origins may call this API from a browser. Add any preview/staging
+# Vercel URLs here too if you test against them.
+ALLOWED_ORIGINS = [
+    "https://tumorsight.vercel.app",
+    "http://localhost:5173",  # local Vite dev server
+]
+
+# --- Rate limiting --------------------------------------------------------
+limiter = Limiter(key_func=get_remote_address)
+
 # --- App setup ----------------------------------------------------------
 app = FastAPI(title="Brain Tumor MRI Classifier")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Allow calls from any origin (browser-based 3D demo, Claude artifacts, etc.)
-# Tighten allow_origins to your actual frontend domain once deployed.
+# Only your actual frontend domain(s) can call this from a browser.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_methods=["POST", "GET"],
     allow_headers=["*"],
 )
 
@@ -70,7 +84,8 @@ def health_check():
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+@limiter.limit("10/minute")
+async def predict(request: Request, file: UploadFile = File(...)):
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded yet")
 
