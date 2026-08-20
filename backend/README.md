@@ -1,15 +1,17 @@
 # Brain Tumor MRI Classifier API
 
 FastAPI service wrapping a VGG16-based brain tumor MRI classifier
-(95.4% test accuracy). Deployed as a Docker container on **Google Cloud
-Run**, which stays free for a low-traffic student demo:
+(95.4% test accuracy). Deployed as a Docker container on **Azure
+Container Apps**, using the free Azure for Students offer:
 
-- Cloud Run's Always Free tier includes 2 million requests/month, forever
-  (not a trial) — a small demo will never come close to that.
-- New Google Cloud accounts also get a $300 / 90-day trial credit as a
-  safety net, though you shouldn't need to touch it for this project.
-- A card is required for identity verification when you sign up, but you
-  are not billed unless you exceed the free monthly quota.
+- $100 in Azure credit plus free access to 25+ Azure services.
+- No credit card required for students aged 18+.
+- Fully self-serve through the `az` CLI — no manual account approval.
+
+(Google Cloud Run was the original plan, but billing in some regions,
+including Saudi Arabia, routes through a reseller with a manual,
+sales-assisted onboarding process — not a fit for a quick student
+deployment. Azure for Students has none of that friction.)
 
 ## Endpoint
 
@@ -29,54 +31,52 @@ Response:
 }
 ```
 
-## Deploying to Google Cloud Run
+## Deploying to Azure Container Apps
 
-1. Install the `gcloud` CLI if you don't have it:
-   https://cloud.google.com/sdk/docs/install
-2. Sign in and create/select a project:
+1. Redeem the Azure for Students offer at
+   https://education.github.com/pack (find Microsoft Azure in the
+   offers list). No card required.
+2. Install the Azure CLI:
+   https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
+3. Log in:
    ```bash
-   gcloud auth login
-   gcloud projects create brain-tumor-demo --set-as-default
-   # or: gcloud config set project <existing-project-id>
+   az login
    ```
-3. Enable billing on the project in the Cloud Console (required even for
-   free-tier usage) and enable the Cloud Run + Cloud Build APIs:
+4. From the folder containing `app.py`, `requirements.txt`,
+   `Dockerfile`, and your model file
+   `vgg16_tumor_model_95_accuracy.h5`, create a resource group:
    ```bash
-   gcloud services enable run.googleapis.com cloudbuild.googleapis.com
+   az group create --name TumorSightRG --location eastus
    ```
-4. From the folder containing `app.py`, `requirements.txt`, `Dockerfile`,
-   and your model file `vgg16_tumor_model_95_accuracy.h5`, deploy directly
-   from source (Cloud Build builds the Docker image for you — no local
-   Docker install needed):
+5. Deploy directly from source — this builds your Dockerfile and
+   deploys it in one step:
    ```bash
-   gcloud run deploy brain-tumor-api \
+   az containerapp up \
+     --name tumorsight-api \
+     --resource-group TumorSightRG \
+     --location eastus \
      --source . \
-     --region us-central1 \
-     --allow-unauthenticated \
-     --memory 2Gi \
-     --timeout 300
+     --target-port 8080 \
+     --ingress external
    ```
-   (`us-central1` is one of the Always Free eligible regions — stick to
-   `us-central1`, `us-east1`, or `us-west1` to stay covered by the free tier.)
-5. The command prints a service URL when done, e.g.
-   `https://brain-tumor-api-xxxxx-uc.a.run.app`. That's your API base —
-   the `/predict` endpoint is at `<that-url>/predict`.
-6. Test it:
+6. The command prints a service URL when done, e.g.
+   `https://tumorsight-api.<random>.eastus.azurecontainerapps.io`.
+   That's your API base — the `/predict` endpoint is at
+   `<that-url>/predict`.
+7. Test it:
    ```bash
-   curl -X POST https://brain-tumor-api-xxxxx-uc.a.run.app/predict \
+   curl -X POST https://tumorsight-api.<random>.eastus.azurecontainerapps.io/predict \
      -F "file=@some_mri_scan.jpg"
    ```
 
 ## Notes
 
-- Cloud Run scales to zero when idle, so the first request after a quiet
-  period will be slow (cold start — the container spins up and loads the
-  173MB model). Subsequent requests are fast.
-- `--memory 2Gi` gives TensorFlow enough headroom to load the model
-  comfortably; this still falls well within the free monthly quota for
-  light demo traffic.
-- Preprocessing matches the training notebook exactly: images are resized
-  to 224x224 and rescaled to [0,1] (no ImageNet mean/BGR subtraction).
+- Container Apps scales down when idle, so the first request after a
+  quiet period will be slow (cold start — the container spins up and
+  loads the 173MB model). Subsequent requests are fast.
+- Preprocessing matches the training notebook exactly: images are
+  resized to 224x224 and rescaled to [0,1] (no ImageNet mean/BGR
+  subtraction).
 - The model loads with `compile=False` to avoid Keras-3 compatibility
-  issues when loading an older Keras-2-saved `.h5` file — fine since this
-  service only runs inference, not training.
+  issues when loading an older Keras-2-saved `.h5` file — fine since
+  this service only runs inference, not training.
