@@ -165,7 +165,15 @@ async function realPredict(file, apiUrl) {
     method: "POST",
     body: formData,
   });
-  if (!res.ok) throw new Error(`API returned ${res.status}`);
+  if (!res.ok) {
+    // 422 = backend rejected the image as not-a-brain-MRI; surface its
+    // specific message instead of a generic status code.
+    if (res.status === 422) {
+      const body = await res.json().catch(() => null);
+      throw new Error(body?.detail || "This doesn't look like a brain MRI scan.");
+    }
+    throw new Error(`API returned ${res.status}`);
+  }
   return res.json();
 }
 
@@ -175,9 +183,7 @@ async function realPredict(file, apiUrl) {
 export default function BrainTumorDemo() {
   const mountRef = useRef(null);
   const sceneRef = useRef({});
-  const [apiUrl, setApiUrl] = useState(
-    "https://tumorsight-api.graysand-2feb18d0.centralindia.azurecontainerapps.io"
-  );
+  const [apiUrl, setApiUrl] = useState("");
   const [showApiConfig, setShowApiConfig] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
   const [result, setResult] = useState(null);

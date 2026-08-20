@@ -24,6 +24,12 @@ MODEL_PATH = os.environ.get("MODEL_PATH", "vgg16_tumor_model_95_accuracy.h5")
 IMG_SIZE = (224, 224)
 CLASS_NAMES = ["glioma", "meningioma", "notumor", "pituitary"]
 
+# Heuristic thresholds for rejecting non-MRI images. Neither check needs an
+# extra model — MRI scans are effectively grayscale, and the classifier's
+# own confidence tends to collapse on genuinely out-of-distribution inputs.
+MAX_MEAN_SATURATION = 0.15  # 0-1 scale; real photos are usually well above this
+MIN_CONFIDENCE = 0.5        # reject if the top class isn't even the majority vote
+
 # --- App setup ----------------------------------------------------------
 app = FastAPI(title="Brain Tumor MRI Classifier")
 
@@ -37,6 +43,13 @@ app.add_middleware(
 )
 
 model = None
+
+
+def mean_saturation(image: Image.Image) -> float:
+    """Average color saturation, 0 (pure grayscale) to 1 (fully saturated)."""
+    hsv = image.convert("HSV")
+    _, s, _ = hsv.split()
+    return float(np.array(s, dtype=np.float32).mean() / 255.0)
 
 
 @app.on_event("startup")
@@ -71,15 +84,38 @@ async def predict(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Could not read image file")
 
     image = image.resize(IMG_SIZE)
+
+    saturation = mean_saturation(image)
+    if saturation > MAX_MEAN_SATURATION:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "This doesn't look like a brain MRI scan (too much color for a "
+                "grayscale scan). Please upload an actual MRI image."
+            ),
+        )
+
     arr = np.array(image, dtype=np.float32) / 255.0  # matches notebook's rescale=1./255
     arr = np.expand_dims(arr, axis=0)  # (1, 224, 224, 3)
 
     probs = model.predict(arr, verbose=0)[0]  # shape (4,)
     predicted_idx = int(np.argmax(probs))
+    confidence = float(probs[predicted_idx])
+
+    if confidence < MIN_CONFIDENCE:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "This doesn't look like a recognizable brain MRI scan "
+                "(the model isn't confident this matches any known tumor "
+                "type or a healthy brain scan). Please upload an actual "
+                "MRI image."
+            ),
+        )
 
     return {
         "predicted_class": CLASS_NAMES[predicted_idx],
-        "confidence": float(probs[predicted_idx]),
+        "confidence": confidence,
         "probabilities": {
             CLASS_NAMES[i]: float(probs[i]) for i in range(len(CLASS_NAMES))
         },
