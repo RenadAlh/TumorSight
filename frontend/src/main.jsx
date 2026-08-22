@@ -1,10 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import BrainTumorDemo from "./TumorSight.jsx";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App.jsx";
 import "./index.css";
+
+// Gates the scroll-reveal styles, see `.js .reveal` in index.css.
+document.documentElement.classList.add("js");
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrainTumorDemo />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );

@@ -3,7 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TumorSight — Brain Tumor MRI 3D Demo</title>
+    <!-- Relative path so Vite fingerprints and copies it; an absolute /path
+         would assume a public/ directory this project does not have. -->
+    <link rel="icon" type="image/svg+xml" href="./src/assets/logo-mark.svg" />
+    <meta
+      name="description"
+      content="TumorSight, a VGG16-based brain tumor MRI classifier. Upload a scan, watch the model read it, and see the full confidence breakdown on an interactive 3D brain."
+    />
+    <meta name="theme-color" content="#0a1615" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>TumorSight, see the scan clearly</title>
   </head>
   <body>
     <div id="root"></div>

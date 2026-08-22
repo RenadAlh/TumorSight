@@ -28,7 +28,7 @@ IMG_SIZE = (224, 224)
 CLASS_NAMES = ["glioma", "meningioma", "notumor", "pituitary"]
 
 # Heuristic thresholds for rejecting non-MRI images. Neither check needs an
-# extra model — MRI scans are effectively grayscale, and the classifier's
+# extra model: MRI scans are effectively grayscale, and the classifier's
 # own confidence tends to collapse on genuinely out-of-distribution inputs.
 COLOR_PIXEL_FRACTION_THRESHOLD = 0.05  # reject if >5% of pixels have real color
 MIN_CONFIDENCE = 0.5                   # reject if the top class isn't even the majority vote
@@ -77,7 +77,7 @@ def is_colorful(image: Image.Image, channel_diff_threshold: int = 12, pixel_frac
 def load_the_model():
     global model
     # compile=False avoids Keras-3/optimizer-state issues loading an older
-    # Keras-2-saved .h5 file — fine since we only need inference, not training.
+    # Keras-2-saved .h5 file, which is fine since we only need inference, not training.
     model = load_model(MODEL_PATH, compile=False)
     # Warm up so the first real request isn't slow
     dummy = np.zeros((1, *IMG_SIZE, 3), dtype=np.float32)
@@ -112,8 +112,8 @@ async def predict(request: Request, file: UploadFile = File(...)):
         raise HTTPException(
             status_code=422,
             detail=(
-                "This doesn't look like a brain MRI scan (too much color for a "
-                "grayscale scan). Please upload an actual MRI image."
+                "This doesn't look like a brain MRI scan. Please upload an "
+                "actual MRI image."
             ),
         )
 
@@ -128,10 +128,8 @@ async def predict(request: Request, file: UploadFile = File(...)):
         raise HTTPException(
             status_code=422,
             detail=(
-                "This doesn't look like a recognizable brain MRI scan "
-                "(the model isn't confident this matches any known tumor "
-                "type or a healthy brain scan). Please upload an actual "
-                "MRI image."
+                "This doesn't look like a brain MRI scan. Please upload an "
+                "actual MRI image."
             ),
         )
 
