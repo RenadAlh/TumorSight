@@ -99,8 +99,8 @@ export default function About() {
         <Aurora />
         <div className="grid-veil pointer-events-none absolute inset-0 opacity-50" aria-hidden="true" />
 
-        <Shell className="relative grid gap-10 py-16 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:py-24">
-          <div className="flex flex-col gap-6">
+        <Shell className="relative grid gap-8 py-12 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:py-16">
+          <div className="flex flex-col gap-5">
             <Reveal>
               <Eyebrow>About the system</Eyebrow>
             </Reveal>
@@ -156,7 +156,7 @@ export default function About() {
           </div>
 
           <Reveal delay={220} className="flex justify-center lg:justify-end">
-            <div className="relative flex h-[460px] w-[460px] items-center justify-center lg:-translate-x-16">
+            <div className="relative flex h-[340px] w-[340px] items-center justify-center lg:-translate-x-16">
               <span
                 className="pulse-ring absolute inset-0 rounded-full"
                 style={{ border: "1px solid rgba(255,171,122,.45)" }}
@@ -169,7 +169,7 @@ export default function About() {
                 className="absolute inset-6 rounded-full"
                 style={{ border: "1px dashed rgba(253,247,242,.16)" }}
               />
-              <LogoMark size={350} />
+              <LogoMark size={260} />
             </div>
           </Reveal>
         </Shell>
@@ -177,7 +177,7 @@ export default function About() {
 
       {/* ============================= METRICS ============================= */}
       <Band tone="warm">
-        <Shell className="py-20 lg:py-24">
+        <Shell className="py-14 lg:py-16">
           <Reveal>
             <SectionHead
               tone="warm"
@@ -205,7 +205,7 @@ export default function About() {
       {/* =========================== ARCHITECTURE ========================== */}
       <Band tone="canvas" className="overflow-hidden">
         <Aurora className="opacity-50" />
-        <Shell className="relative py-20 lg:py-24">
+        <Shell className="relative py-14 lg:py-16">
           <Reveal>
             <SectionHead
               eyebrow="Architecture"
@@ -214,7 +214,7 @@ export default function About() {
             />
           </Reveal>
 
-          <ol className="mt-12 flex flex-col gap-3">
+          <ol className="mt-8 flex flex-col gap-3">
             {ARCHITECTURE.map((layer, i) => (
               <Reveal key={layer.label} delay={i * 80}>
                 <li className="panel panel-hover flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:gap-6">
@@ -249,7 +249,7 @@ export default function About() {
 
       {/* ============================ TECH STACK =========================== */}
       <Band tone="deepest">
-        <Shell className="py-20 lg:py-24">
+        <Shell className="py-14 lg:py-16">
           <Reveal>
             <SectionHead
               eyebrow="Tech stack"
@@ -258,7 +258,7 @@ export default function About() {
             />
           </Reveal>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
             {STACK.map(({ icon: Icon, title, items }, i) => (
               <Reveal key={title} delay={i * 110}>
                 <div className="panel panel-hover flex h-full flex-col gap-5 p-6">
@@ -315,7 +315,7 @@ export default function About() {
 
       {/* ============================= FEATURES ============================ */}
       <Band tone="warm">
-        <Shell className="py-20 lg:py-24">
+        <Shell className="py-14 lg:py-16">
           <Reveal>
             <SectionHead
               tone="warm"
@@ -324,7 +324,7 @@ export default function About() {
             />
           </Reveal>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map(({ icon: Icon, title, text, accent }, i) => (
               <Reveal key={title} delay={i * 80}>
                 <div className="group panel-warm panel-hover relative flex h-full flex-col gap-4 overflow-hidden p-6">
@@ -368,40 +368,40 @@ export default function About() {
       {/* ====================== DISCLAIMER + DEVELOPER ===================== */}
       <Band tone="canvas" className="overflow-hidden">
         <Aurora className="opacity-60" />
-        <Shell className="relative flex flex-col gap-6 py-20 lg:py-24">
+        <Shell className="relative flex flex-col gap-4 py-10 lg:py-12">
           <Reveal>
             <div
-              className="relative overflow-hidden rounded-xl"
+              className="relative overflow-hidden rounded-lg"
               style={{
                 background: "linear-gradient(135deg, rgba(125,45,92,.34), rgba(10,22,21,.35) 62%)",
                 border: "1px solid rgba(201,77,118,.42)",
               }}
             >
               <div
-                className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full"
+                className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full"
                 style={{ background: "radial-gradient(circle, rgba(201,77,118,.28), transparent 70%)" }}
                 aria-hidden="true"
               />
 
-              <div className="relative flex flex-col gap-6 p-7 sm:flex-row sm:items-center sm:p-9">
+              <div className="relative flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:p-5">
                 <div
-                  className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg"
+                  className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-md"
                   style={{
                     background: "rgba(201,77,118,.18)",
                     border: "1px solid rgba(201,77,118,.45)",
                     boxShadow: "0 14px 30px -14px rgba(201,77,118,.9)",
                   }}
                 >
-                  <ShieldAlert size={28} color="var(--ts-coral-2)" strokeWidth={2} />
+                  <ShieldAlert size={26} color="var(--ts-coral-2)" strokeWidth={2} />
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <h2 className="font-display text-[1.5rem] font-bold leading-tight" style={{ color: "var(--ts-cream)", letterSpacing: "-0.03em" }}>
+                  <h2 className="font-display text-[1.1rem] font-bold leading-tight" style={{ color: "var(--ts-cream)", letterSpacing: "-0.03em" }}>
                       Educational tool, not a diagnostic device.
                     </h2>
 
                   <p
-                    className="mt-2 max-w-3xl text-[0.9rem] leading-relaxed"
+                    className="mt-1 max-w-3xl text-[0.82rem] leading-snug"
                     style={{ color: "var(--ts-cream-2)" }}
                   >
                     TumorSight is a personal project, not a medical device. Its outputs should not inform clinical decisions.
@@ -415,46 +415,46 @@ export default function About() {
           <Reveal delay={120}>
             <div className="panel panel-hover relative overflow-hidden">
               <div
-                className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full"
+                className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full"
                 style={{ background: "radial-gradient(circle, rgba(255,122,84,.28), transparent 70%)" }}
                 aria-hidden="true"
               />
-              <div className="relative flex flex-col gap-6 p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
-                <div className="flex items-center gap-5">
+              <div className="relative flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+                <div className="flex items-center gap-4">
                   <img
                     src={profilePhoto}
                     alt="Renad Alharthi"
-                    className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
+                    className="h-14 w-14 flex-shrink-0 rounded-md object-cover"
                     style={{
                       boxShadow: "0 14px 30px -14px rgba(255,122,84,.9)",
                     }}
                   />
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-0.5">
                     <Eyebrow>Designed &amp; built by</Eyebrow>
-                    <h2 className="font-display text-[1.5rem] font-bold leading-tight" style={{ color: "var(--ts-cream)", letterSpacing: "-0.03em" }}>
+                    <h2 className="font-display text-[1.1rem] font-bold leading-tight" style={{ color: "var(--ts-cream)", letterSpacing: "-0.03em" }}>
                       Renad Alharthi
                     </h2>
-                    <p className="text-[0.88rem]" style={{ color: "var(--ts-cream-2)" }}>
+                    <p className="text-[0.8rem]" style={{ color: "var(--ts-cream-2)" }}>
                       Artificial Intelligence Engineer · Model, API & Interface
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2">
                   <a
                     href="https://github.com/RenadAlh"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-primary"
+                    className="btn btn-primary btn-sm"
                   >
-                    <Github size={16} />
+                    <Github size={14} />
                     @RenadAlh
                   </a>
                   <a
                     href="https://github.com/RenadAlh/TumorSight"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-ghost"
+                    className="btn btn-ghost btn-sm"
                   >
                     Project Repository
                   </a>
@@ -462,7 +462,7 @@ export default function About() {
                     href="https://github.com/RenadAlh/VGG16TumorClassification"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-ghost"
+                    className="btn btn-ghost btn-sm"
                   >
                     Model Repository
                   </a>

@@ -6,9 +6,9 @@ import { Logo, Shell } from "./ui.jsx";
 export default function Footer() {
   return (
     <footer style={{ background: "var(--ts-deep)", borderTop: "1px solid var(--ts-hairline)" }}>
-      <Shell className="flex flex-col gap-8 py-12 md:flex-row md:items-center md:justify-between">
+      <Shell className="flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between">
         <div className="max-w-sm">
-          <Logo height={100} />
+          <Logo height={80} />
           <p className="mt-4 text-sm leading-relaxed" style={{ color: "var(--ts-cream-3)" }}>
             Educational brain tumor MRI classifier. Not a medical device or a substitute for a radiologist.
           </p>

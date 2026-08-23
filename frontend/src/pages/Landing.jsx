@@ -46,9 +46,9 @@ export default function Landing() {
         <Aurora />
         <div className="grid-veil pointer-events-none absolute inset-0 opacity-[0.55]" aria-hidden="true" />
 
-        <Shell className="relative grid items-center gap-12 pb-24 pt-14 lg:grid-cols-[1.02fr_1fr] lg:gap-10 lg:pb-32 lg:pt-20">
+        <Shell className="relative grid items-center gap-8 pb-14 pt-10 lg:grid-cols-[1.02fr_1fr] lg:gap-10 lg:pb-16 lg:pt-12">
           {/* ---- copy ---- */}
-          <div className="flex flex-col items-start gap-7">
+          <div className="flex flex-col items-start gap-5">
             <Reveal>
               <Eyebrow>VGG16 · 4-Class Brain MRI Tumor Classifier</Eyebrow>
             </Reveal>
@@ -148,9 +148,9 @@ export default function Landing() {
               <Reveal
                 key={m.label}
                 delay={i * 90}
-                className="flex flex-col gap-1 py-7 sm:px-8 sm:first:pl-0 sm:last:pr-0"
+                className="flex flex-col gap-1 py-5 sm:px-8 sm:first:pl-0 sm:last:pr-0"
               >
-                <span className="t-num text-[1.9rem] font-bold leading-none grad-text">
+                <span className="t-num text-[1.7rem] font-bold leading-none grad-text">
                   {m.value.toFixed(2)}%
                 </span>
                 <span className="t-eyebrow" style={{ color: "var(--ts-cream-3)" }}>
@@ -164,7 +164,7 @@ export default function Landing() {
 
       {/* ========================== HOW TO USE =========================== */}
       <Band tone="warm" id="how-it-works" className="overflow-hidden">
-        <Shell className="py-20 lg:py-28">
+        <Shell className="py-14 lg:py-20">
           <Reveal>
             <SectionHead
               tone="warm"
@@ -174,7 +174,7 @@ export default function Landing() {
             />
           </Reveal>
 
-          <div className="relative mt-14 grid gap-6 md:grid-cols-3">
+          <div className="relative mt-10 grid gap-6 md:grid-cols-3">
             {/* connective thread between the steps */}
             <div
               className="pointer-events-none absolute left-0 right-0 top-[3.4rem] hidden md:block"
@@ -188,7 +188,7 @@ export default function Landing() {
 
             {STEPS.map(({ icon: Icon, title, body, tag }, i) => (
               <Reveal key={title} delay={i * 120}>
-                <article className="panel-warm panel-hover relative flex h-full flex-col gap-4 p-7">
+                <article className="panel-warm panel-hover relative flex h-full flex-col gap-3 p-5">
                   <div className="flex items-center justify-between">
                     <span
                       className="flex h-11 w-11 items-center justify-center rounded-md"
@@ -214,7 +214,7 @@ export default function Landing() {
             ))}
           </div>
 
-          <Reveal delay={180} className="mt-12 flex justify-center">
+          <Reveal delay={180} className="mt-8 flex justify-center">
             <Link to="/demo" className="btn btn-warm">
               <Crosshair size={16} strokeWidth={2.4} />
               Run Analysis
@@ -226,7 +226,7 @@ export default function Landing() {
       {/* ======================== WHAT IT SEPARATES ======================= */}
       <Band tone="canvas" className="overflow-hidden">
         <Aurora className="opacity-60" />
-        <Shell className="relative py-20 lg:py-28">
+        <Shell className="relative py-14 lg:py-20">
           <Reveal>
             <SectionHead
               eyebrow="The four classes"
@@ -235,7 +235,7 @@ export default function Landing() {
             />
           </Reveal>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
             {CLASS_ORDER.map((key, i) => {
               const info = CLASS_INFO[key];
               return (
@@ -272,10 +272,10 @@ export default function Landing() {
 
       {/* =========================== DISCLAIMER ========================== */}
 <Band tone="deepest">
-  <Shell className="py-16 lg:py-20">
+  <Shell className="py-8 lg:py-10">
     <Reveal>
       <div
-        className="relative overflow-hidden rounded-xl p-8 sm:p-10"
+        className="relative overflow-hidden rounded-lg p-4 sm:p-5"
         style={{
           background:
             "linear-gradient(135deg, rgba(125,45,92,.34), rgba(10,22,21,.35) 62%)",
@@ -283,7 +283,7 @@ export default function Landing() {
         }}
       >
         <div
-          className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full"
+          className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full"
           style={{
             background:
               "radial-gradient(circle, rgba(201,77,118,.35), transparent 70%)",
@@ -291,10 +291,10 @@ export default function Landing() {
           aria-hidden="true"
         />
 
-        <div className="relative flex items-center gap-8">
-          {/* Large warning icon */}
+        <div className="relative flex items-center gap-4">
+          {/* Warning icon */}
           <div
-            className="flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-2xl"
+            className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-md"
             style={{
               background: "rgba(201,77,118,.18)",
               border: "1px solid rgba(201,77,118,.45)",
@@ -302,7 +302,7 @@ export default function Landing() {
             }}
           >
             <ShieldAlert
-              size={46}
+              size={26}
               color="var(--ts-coral-2)"
               strokeWidth={2}
             />
@@ -313,19 +313,19 @@ export default function Landing() {
             <Eyebrow>Disclaimer</Eyebrow>
 
             <h2
-              className="t-h2 mt-3"
+              className="t-h3 mt-1"
               style={{ color: "var(--ts-cream)" }}
             >
               This is an educational tool, not a diagnostic device.
             </h2>
 
             <ul
-              className="mt-5 flex max-w-5xl flex-col gap-3 text-[0.95rem] leading-relaxed"
+              className="mt-2 flex max-w-5xl flex-col gap-1 text-[0.8rem] leading-snug"
               style={{ color: "var(--ts-cream-2)" }}
             >
-              <li className="flex gap-3">
+              <li className="flex gap-2.5">
                 <span
-                  className="mt-[0.6rem] h-1.5 w-1.5 flex-shrink-0 rounded-full"
+                  className="mt-[0.5rem] h-1 w-1 flex-shrink-0 rounded-full"
                   style={{ background: "var(--ts-coral)" }}
                 />
                 <span>
@@ -334,9 +334,9 @@ export default function Landing() {
                 </span>
               </li>
 
-              <li className="flex gap-3">
+              <li className="flex gap-2.5">
                 <span
-                  className="mt-[0.6rem] h-1.5 w-1.5 flex-shrink-0 rounded-full"
+                  className="mt-[0.5rem] h-1 w-1 flex-shrink-0 rounded-full"
                   style={{ background: "var(--ts-coral)" }}
                 />
                 <span>
@@ -354,7 +354,7 @@ export default function Landing() {
       {/* ============================ CLOSING ============================ */}
 <Band tone="canvas" className="overflow-hidden">
   <Aurora className="opacity-70" />
-  <Shell className="relative flex flex-col items-center gap-7 py-24 text-center">
+  <Shell className="relative flex flex-col items-center gap-5 py-16 text-center">
     <Reveal>
       <Eyebrow>Ready when you are</Eyebrow>
     </Reveal>

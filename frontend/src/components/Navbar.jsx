@@ -32,7 +32,7 @@ export default function Navbar() {
       <nav className="mx-auto flex w-full max-w-shell items-center justify-between gap-6 px-6 py-4 sm:px-8">
         <Link to="/" className="group flex items-center" aria-label="TumorSight home">
           <span className="transition-transform duration-500 ease-out group-hover:scale-[1.04]">
-            <LogoMark size={38} />
+            <LogoMark size={50} />
           </span>
         </Link>
 
@@ -43,7 +43,7 @@ export default function Navbar() {
                 <NavLink
                   to={l.to}
                   end={l.end}
-                  className="link-underline font-display text-[1.1rem] font-medium"
+                  className="link-underline font-display text-[0.995rem] font-medium"
                   data-active={l.end ? pathname === l.to : pathname.startsWith(l.to)}
                   style={({ isActive }) => ({
                     color: isActive ? "var(--ts-cream)" : "var(--ts-cream-3)",
@@ -55,8 +55,8 @@ export default function Navbar() {
             ))}
           </ul>
 
-          <Link to="/demo" className="btn btn-primary hidden sm:inline-flex">
-            <Crosshair size={15} strokeWidth={2.4} />
+          <Link to="/demo" className="btn btn-primary btn-sm hidden sm:inline-flex">
+            <Crosshair size={14} strokeWidth={2.5} />
             Run Analysis
           </Link>
         </div>
