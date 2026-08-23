@@ -39,7 +39,7 @@ export default {
         xl: "var(--r-xl)",
       },
       maxWidth: {
-        shell: "1180px",
+        shell: "1800px",
         prose: "62ch",
       },
       transitionTimingFunction: {

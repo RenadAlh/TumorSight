@@ -14,7 +14,7 @@ import { Band, CornerBrackets, Eyebrow, Shell } from "../components/ui.jsx";
 import { CLASS_INFO, CLASS_ORDER } from "../theme.js";
 
 /* ---------------------------------------------------------------------
-   Mock predictor, used when the API URL field is cleared. Deterministic
+   Mock predictor — used when the API URL field is cleared. Deterministic
    per-file so the same upload always gives the same demo result.
 --------------------------------------------------------------------- */
 function mockPredict(file) {
@@ -22,12 +22,20 @@ function mockPredict(file) {
     setTimeout(() => {
       let h = 0;
       const str = file.name + file.size;
-      for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+
+      for (let i = 0; i < str.length; i++) {
+        h = (h * 31 + str.charCodeAt(i)) >>> 0;
+      }
+
       const idx = h % CLASS_ORDER.length;
       const base = 0.55 + (h % 40) / 100;
       let remaining = 1 - base;
       const probs = {};
-      CLASS_ORDER.forEach((c, i) => (probs[c] = i === idx ? base : 0));
+
+      CLASS_ORDER.forEach((c, i) => {
+        probs[c] = i === idx ? base : 0;
+      });
+
       CLASS_ORDER.forEach((c, i) => {
         if (i !== idx) {
           const share = remaining * (0.5 + ((h >> i) % 10) / 20);
@@ -35,7 +43,9 @@ function mockPredict(file) {
           remaining -= probs[c];
         }
       });
+
       probs[CLASS_ORDER[idx]] += remaining > 0 ? remaining : 0;
+
       resolve({
         predicted_class: CLASS_ORDER[idx],
         confidence: probs[CLASS_ORDER[idx]],
@@ -48,20 +58,30 @@ function mockPredict(file) {
 async function realPredict(file, apiUrl) {
   const formData = new FormData();
   formData.append("file", file);
+
   const res = await fetch(apiUrl.replace(/\/$/, "") + "/predict", {
     method: "POST",
     body: formData,
   });
+
   if (!res.ok) {
     const body = await res.json().catch(() => null);
+
     if (res.status === 422 || res.status === 400) {
-      throw new Error(body?.detail || "This doesn't look like a brain MRI scan.");
+      throw new Error(
+        body?.detail || "This doesn't look like a brain MRI scan."
+      );
     }
+
     if (res.status === 429) {
-      throw new Error("Rate limit reached, the API allows 10 scans a minute. Try again shortly.");
+      throw new Error(
+        "Rate limit reached, the API allows 10 scans a minute. Try again shortly."
+      );
     }
+
     throw new Error(body?.detail || `The API returned ${res.status}.`);
   }
+
   return res.json();
 }
 
@@ -69,7 +89,7 @@ const DEFAULT_API_URL =
   "https://tumorsight-api.graysand-2feb18d0.centralindia.azurecontainerapps.io";
 
 /* The detection beat. The request fires immediately, but the reveal waits
-   for the choreography to finish: a classification that snaps into place
+   for the choreography to finish — a classification that snaps into place
    with no visible work reads as a lookup, not an analysis. */
 const PHASES = [
   "Reading file",
@@ -78,6 +98,7 @@ const PHASES = [
   "VGG16 feature extraction",
   "Softmax over 4 classes",
 ];
+
 const PHASE_MS = 620;
 const MIN_SCAN_MS = PHASES.length * PHASE_MS;
 
@@ -94,22 +115,27 @@ export default function Demo() {
   const [dragging, setDragging] = useState(false);
 
   const timers = useRef([]);
+
   const clearTimers = () => {
     timers.current.forEach(clearTimeout);
     timers.current = [];
   };
+
   useEffect(() => () => clearTimers(), []);
 
   // Object URLs are revoked when the file changes or the page unmounts.
   useEffect(() => {
     if (!file) return;
+
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
+
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
   const stage = useCallback((f) => {
     if (!f) return;
+
     clearTimers();
     setFile(f);
     setResult(null);
@@ -130,6 +156,7 @@ export default function Demo() {
 
   const run = useCallback(async () => {
     if (!file) return;
+
     clearTimers();
     setStatus("scanning");
     setResult(null);
@@ -138,13 +165,24 @@ export default function Demo() {
 
     PHASES.forEach((_, i) => {
       if (i === 0) return;
-      timers.current.push(setTimeout(() => setPhase(i), i * PHASE_MS));
+
+      timers.current.push(
+        setTimeout(() => setPhase(i), i * PHASE_MS)
+      );
     });
 
     const startedAt = performance.now();
+
     try {
-      const data = liveApi ? await realPredict(file, DEFAULT_API_URL) : await mockPredict(file);
-      const wait = Math.max(0, MIN_SCAN_MS - (performance.now() - startedAt));
+      const data = liveApi
+        ? await realPredict(file, DEFAULT_API_URL)
+        : await mockPredict(file);
+
+      const wait = Math.max(
+        0,
+        MIN_SCAN_MS - (performance.now() - startedAt)
+      );
+
       timers.current.push(
         setTimeout(() => {
           setResult(data);
@@ -152,7 +190,11 @@ export default function Demo() {
         }, wait)
       );
     } catch (err) {
-      const wait = Math.max(0, 900 - (performance.now() - startedAt));
+      const wait = Math.max(
+        0,
+        900 - (performance.now() - startedAt)
+      );
+
       timers.current.push(
         setTimeout(() => {
           setErrorMsg(err.message);
@@ -173,15 +215,23 @@ export default function Demo() {
 
   return (
     <Band tone="canvas" className="overflow-hidden">
-      <div className="grid-veil pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+      <div
+        className="grid-veil pointer-events-none absolute inset-0 opacity-40"
+        aria-hidden="true"
+      />
 
       <Shell className="relative py-6 lg:py-8">
         {/* ------------------------------ header ------------------------------ */}
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="flex flex-col gap-3">
             <Eyebrow>Analysis console</Eyebrow>
-            <h1 className="t-h2" style={{ color: "var(--ts-cream)" }}>
-              Load a scan, then <span className="grad-text">run the model.</span>
+
+            <h1
+              className="t-h2"
+              style={{ color: "var(--ts-cream)" }}
+            >
+              Load a scan, then{" "}
+              <span className="grad-text">run the model.</span>
             </h1>
           </div>
 
@@ -193,16 +243,25 @@ export default function Demo() {
           >
             <span
               className="inline-block h-1.5 w-1.5 rounded-full"
-              style={{ background: liveApi ? "var(--ts-aqua)" : "var(--ts-coral)" }}
+              style={{
+                background: liveApi
+                  ? "var(--ts-aqua)"
+                  : "var(--ts-coral)",
+              }}
             />
+
             {liveApi ? "Live API" : "Demo mode"}
           </button>
         </div>
 
         {/* ------------------------------ panels ------------------------------ */}
-          <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,780px)_minmax(0,1fr)]">
+        {/* Was minmax(0,780px)_minmax(0,1fr) — a hard 780px cap on panel A left
+            panel B with only ~300px inside the 1180px shell. Proportional
+            columns keep both panels balanced at every width, matching the
+            ratio the Landing hero already uses successfully. */}
+        <div className="mt-5 grid gap-5 lg:grid-cols-[1.15fr_1fr]">
           {/* ======================= PANEL A · SCAN BAY ======================= */}
-          <section className="panel flex aspect-square max-w-[780px] flex-col p-5 sm:p-6">
+          <section className="panel flex aspect-square flex-col p-5 sm:p-6">
             <PanelHead
               index="A"
               title="Scan bay"
@@ -217,7 +276,15 @@ export default function Demo() {
                   ? "Rejected"
                   : "Complete"
               }
-              tone={status === "error" ? "error" : scanning ? "busy" : status === "done" ? "ok" : "idle"}
+              tone={
+                status === "error"
+                  ? "error"
+                  : scanning
+                  ? "busy"
+                  : status === "done"
+                  ? "ok"
+                  : "idle"
+              }
             />
 
             {/* image well */}
@@ -235,11 +302,17 @@ export default function Demo() {
                   : info
                   ? `${info.color}88`
                   : undefined,
-                transition: "border-color .3s ease, box-shadow .3s ease",
-                boxShadow: dragging ? "inset 0 0 0 1px rgba(255,122,84,.5), 0 0 40px -14px rgba(255,122,84,.7)" : undefined,
+                transition:
+                  "border-color .3s ease, box-shadow .3s ease",
+                boxShadow: dragging
+                  ? "inset 0 0 0 1px rgba(255,122,84,.5), 0 0 40px -14px rgba(255,122,84,.7)"
+                  : undefined,
               }}
             >
-              <div className="grid-veil absolute inset-0 opacity-40" aria-hidden="true" />
+              <div
+                className="grid-veil absolute inset-0 opacity-40"
+                aria-hidden="true"
+              />
 
               {previewUrl ? (
                 <>
@@ -256,8 +329,12 @@ export default function Demo() {
                       transform: scanning ? "scale(1.015)" : "none",
                     }}
                   />
+
                   {scanning && <ScanOverlay />}
-                  {status === "done" && info && <ResultOverlay info={info} />}
+
+                  {status === "done" && info && (
+                    <ResultOverlay info={info} />
+                  )}
                 </>
               ) : (
                 <label
@@ -268,20 +345,34 @@ export default function Demo() {
                     className="flex h-14 w-14 items-center justify-center rounded-md transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-105"
                     style={{
                       background: "rgba(253,247,242,.05)",
-                      border: "1px dashed rgba(255,122,84,.45)",
+                      border:
+                        "1px dashed rgba(255,122,84,.45)",
                     }}
                   >
-                    <UploadCloud size={22} color="var(--ts-coral)" />
+                    <UploadCloud
+                      size={22}
+                      color="var(--ts-coral)"
+                    />
                   </span>
-                  <span className="t-h3" style={{ color: "var(--ts-cream)" }}>
+
+                  <span
+                    className="t-h3"
+                    style={{ color: "var(--ts-cream)" }}
+                  >
                     Drop an MRI slice here
                   </span>
-                  <span className="text-[0.85rem]">or click to browse · JPG or PNG</span>
+
+                  <span className="text-[0.85rem]">
+                    or click to browse · JPG or PNG
+                  </span>
+
                   <input
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => stage(e.target.files?.[0])}
+                    onChange={(e) =>
+                      stage(e.target.files?.[0])
+                    }
                   />
                 </label>
               )}
@@ -302,29 +393,45 @@ export default function Demo() {
             {/* file meta + controls */}
             <div className="mt-4 flex flex-col gap-3">
               {file && (
-                <div className="flex items-center gap-3 text-[0.78rem]" style={{ color: "var(--ts-cream-3)" }}>
+                <div
+                  className="flex items-center gap-3 text-[0.78rem]"
+                  style={{ color: "var(--ts-cream-3)" }}
+                >
                   <ImageIcon size={14} />
-                  <span className="t-num truncate" title={file.name}>
+
+                  <span
+                    className="t-num truncate"
+                    title={file.name}
+                  >
                     {file.name}
                   </span>
+
                   <span className="t-num ml-auto flex-shrink-0 opacity-70">
                     {(file.size / 1024).toFixed(0)} KB
                   </span>
                 </div>
               )}
 
-              {(scanning || status === "done") && <PhaseTrack phase={phase} />}
+              {(scanning || status === "done") && (
+                <PhaseTrack phase={phase} />
+              )}
 
               {status === "error" && (
                 <div
                   className="flex items-start gap-3 rounded-md p-3.5 text-[0.85rem] leading-relaxed"
                   style={{
                     background: "rgba(125,45,92,.3)",
-                    border: "1px solid rgba(201,77,118,.5)",
+                    border:
+                      "1px solid rgba(201,77,118,.5)",
                     color: "var(--ts-cream)",
                   }}
                 >
-                  <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" color="var(--ts-coral-2)" />
+                  <AlertTriangle
+                    size={16}
+                    className="mt-0.5 flex-shrink-0"
+                    color="var(--ts-coral-2)"
+                  />
+
                   <span>{errorMsg}</span>
                 </div>
               )}
@@ -337,18 +444,32 @@ export default function Demo() {
                 >
                   {scanning ? (
                     <>
-                      <RefreshCw size={16} className="spin-slow" />
+                      <RefreshCw
+                        size={16}
+                        className="spin-slow"
+                      />
                       Analyzing
                     </>
                   ) : (
                     <>
-                      <Crosshair size={16} strokeWidth={2.4} />
-                      {status === "done" || status === "error" ? "Run again" : "Run Analysis"}
+                      <Crosshair
+                        size={16}
+                        strokeWidth={2.4}
+                      />
+                      {status === "done" ||
+                      status === "error"
+                        ? "Run again"
+                        : "Run Analysis"}
                     </>
                   )}
                 </button>
+
                 {file && (
-                  <button className="btn btn-ghost" onClick={reset} disabled={scanning}>
+                  <button
+                    className="btn btn-ghost"
+                    onClick={reset}
+                    disabled={scanning}
+                  >
                     <X size={15} />
                     Clear
                   </button>
@@ -358,11 +479,17 @@ export default function Demo() {
           </section>
 
           {/* ======================== PANEL B · RESULTS ======================= */}
-           <section className="flex w-full min-w-0 flex-col gap-4 self-stretch">
+          <section className="flex w-full min-w-0 flex-col gap-4 self-stretch">
             {status === "done" && result && info ? (
-              <ResultsPanel result={result} info={info} />
+              <ResultsPanel
+                result={result}
+                info={info}
+              />
             ) : (
-              <IdlePanel status={status} phase={phase} />
+              <IdlePanel
+                status={status}
+                phase={phase}
+              />
             )}
 
             <div
@@ -373,16 +500,19 @@ export default function Demo() {
                 color: "var(--ts-cream-3)",
               }}
             >
-              <Info size={15} className="mt-0.5 flex-shrink-0" />
+              <Info
+                size={15}
+                className="mt-0.5 flex-shrink-0"
+              />
+
               <span>
-                Educational demo only, not a diagnostic device. The model
-                classifies tumor <em>type</em>; it does not
-                localize, grade, or rule anything out.
+                Educational demo only, not a diagnostic device.
+                The model classifies tumor <em>type</em>; it does
+                not localize, grade, or rule anything out.
               </span>
             </div>
           </section>
         </div>
-
       </Shell>
     </Band>
   );
@@ -392,7 +522,12 @@ export default function Demo() {
    Sub-components
    ===================================================================== */
 
-function PanelHead({ index, title, status, tone = "idle" }) {
+function PanelHead({
+  index,
+  title,
+  status,
+  tone = "idle",
+}) {
   const dot = {
     idle: "var(--ts-cream-3)",
     busy: "var(--ts-coral)",
@@ -412,17 +547,31 @@ function PanelHead({ index, title, status, tone = "idle" }) {
       >
         {index}
       </span>
-      <h2 className="t-h3 flex-shrink-0" style={{ color: "var(--ts-cream)" }}>
+
+      <h2
+        className="t-h3 flex-shrink-0"
+        style={{ color: "var(--ts-cream)" }}
+      >
         {title}
       </h2>
+
       <span className="ml-auto flex min-w-0 items-center gap-2">
         <span
-          className={`inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full ${tone === "busy" ? "blink" : ""}`}
-          style={{ background: dot, boxShadow: `0 0 8px ${dot}` }}
+          className={`inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full ${
+            tone === "busy" ? "blink" : ""
+          }`}
+          style={{
+            background: dot,
+            boxShadow: `0 0 8px ${dot}`,
+          }}
         />
+
         {/* Long phase labels are repeated in full in the phase track below,
             so the header can afford to clip them. */}
-        <span className="t-eyebrow hidden truncate sm:inline" style={{ color: "var(--ts-cream-3)" }}>
+        <span
+          className="t-eyebrow hidden truncate sm:inline"
+          style={{ color: "var(--ts-cream-3)" }}
+        >
           {status}
         </span>
       </span>
@@ -433,30 +582,55 @@ function PanelHead({ index, title, status, tone = "idle" }) {
 /** The travelling scan line + reticle drawn over the uploaded image. */
 function ScanOverlay() {
   return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div
+      className="pointer-events-none absolute inset-0"
+      aria-hidden="true"
+    >
       <div
         className="absolute inset-0"
-        style={{ background: "linear-gradient(180deg, rgba(5,13,12,.6), transparent 30%, transparent 70%, rgba(5,13,12,.6))" }}
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(5,13,12,.6), transparent 30%, transparent 70%, rgba(5,13,12,.6))",
+        }}
       />
+
       <div className="scanline absolute inset-x-0 top-0 h-24">
         <div
           className="h-full w-full"
-          style={{ background: "linear-gradient(180deg, transparent, rgba(255,122,84,.22))" }}
+          style={{
+            background:
+              "linear-gradient(180deg, transparent, rgba(255,122,84,.22))",
+          }}
         />
+
         <div
           className="h-[2px] w-full"
-          style={{ background: "linear-gradient(90deg, transparent, #ffd7bd, #ff7a54, #ffd7bd, transparent)", boxShadow: "0 0 18px 2px rgba(255,122,84,.85)" }}
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, #ffd7bd, #ff7a54, #ffd7bd, transparent)",
+            boxShadow:
+              "0 0 18px 2px rgba(255,122,84,.85)",
+          }}
         />
       </div>
+
       {/* reticle */}
       <div className="absolute inset-0 flex items-center justify-center">
         <span
           className="pulse-ring absolute h-32 w-32 rounded-full"
-          style={{ border: "1px solid rgba(255,171,122,.8)" }}
+          style={{
+            border:
+              "1px solid rgba(255,171,122,.8)",
+          }}
         />
+
         <span
           className="pulse-ring absolute h-32 w-32 rounded-full"
-          style={{ border: "1px solid rgba(201,77,118,.7)", animationDelay: "-1.2s" }}
+          style={{
+            border:
+              "1px solid rgba(201,77,118,.7)",
+            animationDelay: "-1.2s",
+          }}
         />
       </div>
     </div>
@@ -466,18 +640,30 @@ function ScanOverlay() {
 /** Post-reveal badge pinned into the image well. */
 function ResultOverlay({ info }) {
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4" aria-hidden="true">
+    <div
+      className="pointer-events-none absolute inset-x-0 bottom-0 p-4"
+      aria-hidden="true"
+    >
       <div
         className="flex items-center gap-2.5 rounded-full px-3.5 py-2 backdrop-blur-md"
         style={{
           width: "fit-content",
           background: "rgba(5,13,12,.82)",
           border: `1px solid ${info.color}`,
-          animation: "ts-count-in .6s cubic-bezier(.16,1,.3,1) both",
+          animation:
+            "ts-count-in .6s cubic-bezier(.16,1,.3,1) both",
         }}
       >
-        <Check size={14} color={info.tint} strokeWidth={3} />
-        <span className="t-eyebrow" style={{ color: info.tint }}>
+        <Check
+          size={14}
+          color={info.tint}
+          strokeWidth={3}
+        />
+
+        <span
+          className="t-eyebrow"
+          style={{ color: info.tint }}
+        >
           {info.label}
         </span>
       </div>
@@ -491,27 +677,39 @@ function PhaseTrack({ phase }) {
     <div className="flex flex-col gap-2.5">
       <div
         className="h-[3px] w-full overflow-hidden rounded-full"
-        style={{ background: "rgba(253,247,242,.08)" }}
+        style={{
+          background: "rgba(253,247,242,.08)",
+        }}
       >
         <div
           className="h-full rounded-full"
           style={{
-            width: `${((phase + 1) / PHASES.length) * 100}%`,
+            width: `${
+              ((phase + 1) / PHASES.length) * 100
+            }%`,
             background: "var(--ts-grad-soft)",
             transition: `width ${PHASE_MS}ms linear`,
-            boxShadow: "0 0 12px rgba(255,122,84,.8)",
+            boxShadow:
+              "0 0 12px rgba(255,122,84,.8)",
           }}
         />
       </div>
+
       <ul className="flex flex-col gap-1">
         {PHASES.map((p, i) => (
           <li
             key={p}
             className="t-num flex items-center gap-2 text-[0.72rem]"
             style={{
-              color: i < phase ? "var(--ts-cream-3)" : i === phase ? "var(--ts-coral-2)" : "var(--ts-cream-3)",
+              color:
+                i < phase
+                  ? "var(--ts-cream-3)"
+                  : i === phase
+                  ? "var(--ts-coral-2)"
+                  : "var(--ts-cream-3)",
               opacity: i > phase ? 0.32 : 1,
-              transition: "opacity .3s ease, color .3s ease",
+              transition:
+                "opacity .3s ease, color .3s ease",
             }}
           >
             {i < phase ? (
@@ -521,6 +719,7 @@ function PhaseTrack({ phase }) {
             ) : (
               <span style={{ opacity: 0.5 }}>·</span>
             )}
+
             {p}
           </li>
         ))}
@@ -532,38 +731,74 @@ function PhaseTrack({ phase }) {
 /** Panel B before a result exists. */
 function IdlePanel({ status, phase }) {
   const scanning = status === "scanning";
+
   return (
     <div className="panel flex flex-1 flex-col p-4 sm:p-5">
       <PanelHead
         index="B"
         title="Analysis"
-        status={scanning ? "Computing" : status === "error" ? "No result" : "Standby"}
-        tone={scanning ? "busy" : status === "error" ? "error" : "idle"}
+        status={
+          scanning
+            ? "Computing"
+            : status === "error"
+            ? "No result"
+            : "Standby"
+        }
+        tone={
+          scanning
+            ? "busy"
+            : status === "error"
+            ? "error"
+            : "idle"
+        }
       />
 
       <div className="flex flex-1 flex-col items-center justify-center gap-4 py-6 text-center">
         <div className="relative flex h-20 w-20 items-center justify-center">
           <span
-            className={`absolute inset-0 rounded-full ${scanning ? "pulse-ring" : ""}`}
-            style={{ border: "1px solid rgba(255,171,122,.4)" }}
+            className={`absolute inset-0 rounded-full ${
+              scanning ? "pulse-ring" : ""
+            }`}
+            style={{
+              border:
+                "1px solid rgba(255,171,122,.4)",
+            }}
           />
+
           <span
             className="absolute inset-3 rounded-full"
-            style={{ border: "1px dashed rgba(253,247,242,.14)" }}
+            style={{
+              border:
+                "1px dashed rgba(253,247,242,.14)",
+            }}
           />
+
           <Crosshair
             size={24}
             strokeWidth={1.6}
-            color={scanning ? "var(--ts-coral)" : "var(--ts-cream-3)"}
+            color={
+              scanning
+                ? "var(--ts-coral)"
+                : "var(--ts-cream-3)"
+            }
             className={scanning ? "spin-slow" : ""}
           />
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <p className="t-h3" style={{ color: "var(--ts-cream)" }}>
-            {scanning ? PHASES[phase] : "No scan analyzed yet"}
+          <p
+            className="t-h3"
+            style={{ color: "var(--ts-cream)" }}
+          >
+            {scanning
+              ? PHASES[phase]
+              : "No scan analyzed yet"}
           </p>
-          <p className="max-w-xs text-[0.86rem] leading-relaxed" style={{ color: "var(--ts-cream-3)" }}>
+
+          <p
+            className="max-w-xs text-[0.86rem] leading-relaxed"
+            style={{ color: "var(--ts-cream-3)" }}
+          >
             {scanning
               ? "Hold on, the full distribution appears here the moment the model settles."
               : "Load a slice into the scan bay and hit Run Analysis. The predicted class, confidence, and all four probabilities land here."}
@@ -571,17 +806,39 @@ function IdlePanel({ status, phase }) {
         </div>
 
         {/* skeleton rows so the panel has the shape of its future content */}
-        <ul className="mt-1 flex w-full max-w-xs flex-col gap-2" aria-hidden="true">
+        <ul
+          className="mt-1 flex w-full max-w-xs flex-col gap-2"
+          aria-hidden="true"
+        >
           {CLASS_ORDER.map((c, i) => (
-            <li key={c} className="grid items-center gap-3" style={{ gridTemplateColumns: "7rem 1fr" }}>
-              <span className="t-eyebrow text-left" style={{ color: "var(--ts-cream-3)", opacity: 0.4 }}>
+            <li
+              key={c}
+              className="grid items-center gap-3"
+              style={{
+                gridTemplateColumns:
+                  "7rem 1fr",
+              }}
+            >
+              <span
+                className="t-eyebrow text-left"
+                style={{
+                  color: "var(--ts-cream-3)",
+                  opacity: 0.4,
+                }}
+              >
                 {CLASS_INFO[c].label}
               </span>
+
               <span
                 className="h-2.5 rounded-full"
                 style={{
-                  background: "rgba(253,247,242,.06)",
-                  animation: scanning ? `ts-blink 1.4s ${i * 0.16}s ease-in-out infinite` : "none",
+                  background:
+                    "rgba(253,247,242,.06)",
+                  animation: scanning
+                    ? `ts-blink 1.4s ${
+                        i * 0.16
+                      }s ease-in-out infinite`
+                    : "none",
                 }}
               />
             </li>
@@ -594,57 +851,113 @@ function IdlePanel({ status, phase }) {
 
 /** Panel B after the reveal. */
 function ResultsPanel({ result, info }) {
-  const runnerUp = CLASS_ORDER.filter((c) => c !== result.predicted_class).sort(
-    (a, b) => (result.probabilities?.[b] ?? 0) - (result.probabilities?.[a] ?? 0)
+  const runnerUp = CLASS_ORDER.filter(
+    (c) => c !== result.predicted_class
+  ).sort(
+    (a, b) =>
+      (result.probabilities?.[b] ?? 0) -
+      (result.probabilities?.[a] ?? 0)
   )[0];
+
   const margin =
-    (result.probabilities?.[result.predicted_class] ?? 0) - (result.probabilities?.[runnerUp] ?? 0);
+    (result.probabilities?.[
+      result.predicted_class
+    ] ?? 0) -
+    (result.probabilities?.[runnerUp] ?? 0);
 
   return (
-    <div className="panel-edge flex flex-1 flex-col" style={{ animation: "ts-count-in .7s cubic-bezier(.16,1,.3,1) both" }}>
+    <div
+      className="panel-edge flex flex-1 flex-col"
+      style={{
+        animation:
+          "ts-count-in .7s cubic-bezier(.16,1,.3,1) both",
+      }}
+    >
       <div className="panel-edge-inner flex flex-1 flex-col p-4 sm:p-5">
-        <PanelHead index="B" title="Analysis" status="Complete" tone="ok" />
+        <PanelHead
+          index="B"
+          title="Analysis"
+          status="Complete"
+          tone="ok"
+        />
 
         {/* headline call */}
-        <div className="mt-4 flex flex-col items-center justify-center gap-5 text-center">
-          <ConfidenceGauge value={result.confidence} color={info.color} size={210} />
+        <div className="mt-4 flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-5">
+          <ConfidenceGauge
+            value={result.confidence}
+            color={info.color}
+            size={148}
+          />
 
-          <div className="flex flex-col items-center gap-2.5">
-            <span className="t-eyebrow" style={{ color: "var(--ts-cream-3)" }}>
+          <div className="flex flex-col gap-2.5 text-center sm:text-left">
+            <span
+              className="t-eyebrow"
+              style={{ color: "var(--ts-cream-3)" }}
+            >
               Predicted class
             </span>
+
             <h3
-              className="font-display text-[2.5rem] font-bold leading-none"
-              style={{ color: info.tint, letterSpacing: "-0.03em" }}
+              className="font-display text-[1.65rem] font-bold leading-none"
+              style={{
+                color: info.tint,
+                letterSpacing: "-0.03em",
+              }}
             >
               {info.label}
             </h3>
-            <p className="max-w-sm text-[0.88rem] leading-relaxed" style={{ color: "var(--ts-cream-2)" }}>
+
+            <p
+              className="text-[0.88rem] leading-relaxed"
+              style={{
+                color: "var(--ts-cream-2)",
+              }}
+            >
               {info.blurb}
             </p>
+
             <span
-              className="t-num mt-1 w-fit self-center rounded-full px-2.5 py-1 text-[0.7rem]"
+              className="t-num mt-1 w-fit self-center rounded-full px-2.5 py-1 text-[0.7rem] sm:self-start"
               style={{
                 background: `${info.color}2e`,
                 border: `1px solid ${info.color}80`,
                 color: info.tint,
               }}
             >
-              +{(margin * 100).toFixed(1)} pts over {CLASS_INFO[runnerUp].label}
+              +{(margin * 100).toFixed(1)} pts over{" "}
+              {CLASS_INFO[runnerUp].label}
             </span>
           </div>
         </div>
 
         {/* full distribution */}
-        <div className="mt-5 border-t pt-4" style={{ borderColor: "var(--ts-hairline)" }}>
+        <div
+          className="mt-5 border-t pt-4"
+          style={{
+            borderColor: "var(--ts-hairline)",
+          }}
+        >
           <div className="mb-3 flex items-center justify-between">
-            <span className="t-eyebrow" style={{ color: "var(--ts-cream-3)" }}>
+            <span
+              className="t-eyebrow"
+              style={{
+                color: "var(--ts-cream-3)",
+              }}
+            >
               Probability breakdown
             </span>
-            <span className="t-num text-[0.68rem]" style={{ color: "var(--ts-cream-3)", opacity: 0.7 }}>
+
+            <span
+              className="t-num text-[0.68rem]"
+              style={{
+                color: "var(--ts-cream-3)",
+                opacity: 0.7,
+              }}
+            >
               softmax · sums to 100%
             </span>
           </div>
+
           <ProbabilityBars
             probabilities={result.probabilities}
             predicted={result.predicted_class}
@@ -654,12 +967,25 @@ function ResultsPanel({ result, info }) {
         {/* what the class means */}
         <div
           className="mt-4 rounded-md p-3.5"
-          style={{ background: "rgba(253,247,242,.035)", border: "1px solid var(--ts-hairline)" }}
+          style={{
+            background: "rgba(253,247,242,.035)",
+            border:
+              "1px solid var(--ts-hairline)",
+          }}
         >
-          <span className="t-eyebrow" style={{ color: info.tint }}>
+          <span
+            className="t-eyebrow"
+            style={{ color: info.tint }}
+          >
             About {info.label}
           </span>
-          <p className="mt-1.5 text-[0.86rem] leading-relaxed" style={{ color: "var(--ts-cream-2)" }}>
+
+          <p
+            className="mt-1.5 text-[0.86rem] leading-relaxed"
+            style={{
+              color: "var(--ts-cream-2)",
+            }}
+          >
             {info.detail}
           </p>
         </div>

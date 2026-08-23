@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Crosshair } from "lucide-react";
-import { Logo, LogoMark } from "./ui.jsx";
+import { LogoMark } from "./ui.jsx";
 
 const LINKS = [
   { to: "/", label: "Home", end: true },
@@ -32,10 +32,7 @@ export default function Navbar() {
       <nav className="mx-auto flex w-full max-w-shell items-center justify-between gap-6 px-6 py-4 sm:px-8">
         <Link to="/" className="group flex items-center" aria-label="TumorSight home">
           <span className="transition-transform duration-500 ease-out group-hover:scale-[1.04]">
-            {/* Small phones get the mark alone: the lockup's wordmark is the
-                first thing to go when the nav runs out of room. */}
-            <Logo height={30} className="hidden xs:block" />
-            <LogoMark size={80} className="xs:hidden" />
+            <LogoMark size={38} />
           </span>
         </Link>
 
