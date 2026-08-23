@@ -29,7 +29,7 @@ import {
 } from "../theme.js";
 
 /* ---------------------------------------------------------------------
-   Mock predictor, used when the API URL field is cleared. Deterministic
+   Mock predictor — used when the API URL field is cleared. Deterministic
    per-file so the same upload always gives the same demo result.
 --------------------------------------------------------------------- */
 
@@ -45,8 +45,8 @@ function mockPredict(file) {
 
       const idx = h % CLASS_ORDER.length;
       const base = 0.55 + (h % 40) / 100;
-      let remaining = 1 - base;
 
+      let remaining = 1 - base;
       const probs = {};
 
       CLASS_ORDER.forEach((c, i) => {
@@ -73,7 +73,8 @@ function mockPredict(file) {
 
       resolve({
         predicted_class: CLASS_ORDER[idx],
-        confidence: probs[CLASS_ORDER[idx]],
+        confidence:
+          probs[CLASS_ORDER[idx]],
         probabilities: probs,
       });
     }, 700);
@@ -136,7 +137,6 @@ const PHASES = [
 ];
 
 const PHASE_MS = 620;
-
 const MIN_SCAN_MS =
   PHASES.length * PHASE_MS;
 
@@ -148,7 +148,6 @@ export default function Demo() {
     useState("idle");
 
   const [file, setFile] = useState(null);
-
   const [previewUrl, setPreviewUrl] =
     useState("");
 
@@ -309,7 +308,6 @@ export default function Demo() {
   return (
     <Band
       tone="canvas"
-      className="overflow-hidden"
     >
       <div
         className="grid-veil pointer-events-none absolute inset-0 opacity-40"
@@ -317,15 +315,12 @@ export default function Demo() {
       />
 
       <Shell className="relative py-4 lg:py-5">
-
         {/* =============================================================
             HEADER
         ============================================================= */}
 
         <div className="flex flex-wrap items-end justify-between gap-4">
-
           <div className="flex flex-col gap-3">
-
             <Eyebrow>
               Analysis console
             </Eyebrow>
@@ -342,7 +337,6 @@ export default function Demo() {
                 run the model.
               </span>
             </h1>
-
           </div>
 
           <button
@@ -368,7 +362,6 @@ export default function Demo() {
               ? "Live API"
               : "Demo mode"}
           </button>
-
         </div>
 
         {/* =============================================================
@@ -376,20 +369,18 @@ export default function Demo() {
         ============================================================= */}
 
         <div
-          className="mt-5 grid min-h-0 gap-5 lg:grid-cols-[minmax(0,780px)_minmax(0,1fr)]"
+          className="mt-5 grid min-h-0 grid-rows-[minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,780px)_minmax(0,1fr)]"
           style={{
             height:
-              "calc(100vh - 230px)",
-            minHeight: "530px",
+              "calc(100dvh - 260px)",
+            minHeight: "460px",
           }}
         >
-
           {/* ===========================================================
               PANEL A · SCAN BAY
           =========================================================== */}
 
-          <section className="panel flex h-full w-full max-w-[780px] min-h-0 flex-col p-5 sm:p-6">
-
+          <section className="panel flex h-full w-full max-w-[780px] min-h-0 flex-col overflow-y-auto p-5 sm:p-6">
             <PanelHead
               index="A"
               title="Scan bay"
@@ -442,7 +433,6 @@ export default function Demo() {
                   : undefined,
               }}
             >
-
               <div
                 className="grid-veil absolute inset-0 opacity-40"
                 aria-hidden="true"
@@ -488,7 +478,6 @@ export default function Demo() {
                       "var(--ts-cream-3)",
                   }}
                 >
-
                   <span
                     className="flex h-14 w-14 items-center justify-center rounded-md transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-105"
                     style={{
@@ -529,7 +518,6 @@ export default function Demo() {
                       )
                     }
                   />
-
                 </label>
               )}
 
@@ -544,13 +532,11 @@ export default function Demo() {
                     : "rgba(255,171,122,.4)"
                 }
               />
-
             </div>
 
             {/* File meta + controls */}
 
             <div className="mt-4 flex flex-col gap-3">
-
               {file && (
                 <div
                   className="flex items-center gap-3 text-[0.78rem]"
@@ -609,7 +595,6 @@ export default function Demo() {
               )}
 
               <div className="flex flex-wrap gap-3">
-
                 <button
                   className="btn btn-primary flex-1"
                   onClick={run}
@@ -652,11 +637,8 @@ export default function Demo() {
                     Clear
                   </button>
                 )}
-
               </div>
-
             </div>
-
           </section>
 
           {/* ===========================================================
@@ -664,9 +646,9 @@ export default function Demo() {
           =========================================================== */}
 
           <section className="flex h-full w-full min-w-0 flex-col gap-4 self-stretch">
+            {/* Fixed-height content wrapper */}
 
             <div className="min-h-0 flex-1">
-
               {status === "done" &&
               result &&
               info ? (
@@ -680,7 +662,6 @@ export default function Demo() {
                   phase={phase}
                 />
               )}
-
             </div>
 
             {/* Disclaimer */}
@@ -710,11 +691,8 @@ export default function Demo() {
                 anything out.
               </span>
             </div>
-
           </section>
-
         </div>
-
       </Shell>
     </Band>
   );
@@ -739,7 +717,6 @@ function PanelHead({
 
   return (
     <div className="flex items-center gap-3">
-
       <span
         className="t-num flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-sm text-[0.72rem] font-bold"
         style={{
@@ -765,7 +742,6 @@ function PanelHead({
       </h2>
 
       <span className="ml-auto flex min-w-0 items-center gap-2">
-
         <span
           className={`inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full ${
             tone === "busy"
@@ -787,9 +763,7 @@ function PanelHead({
         >
           {status}
         </span>
-
       </span>
-
     </div>
   );
 }
@@ -813,7 +787,6 @@ function ScanOverlay() {
       />
 
       <div className="scanline absolute inset-x-0 top-0 h-24">
-
         <div
           className="h-full w-full"
           style={{
@@ -831,11 +804,9 @@ function ScanOverlay() {
               "0 0 18px 2px rgba(255,122,84,.85)",
           }}
         />
-
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center">
-
         <span
           className="pulse-ring absolute h-32 w-32 rounded-full"
           style={{
@@ -852,7 +823,6 @@ function ScanOverlay() {
             animationDelay: "-1.2s",
           }}
         />
-
       </div>
     </div>
   );
@@ -905,7 +875,6 @@ function ResultOverlay({ info }) {
 function PhaseTrack({ phase }) {
   return (
     <div className="flex flex-col gap-2.5">
-
       <div
         className="h-[3px] w-full overflow-hidden rounded-full"
         style={{
@@ -921,9 +890,12 @@ function PhaseTrack({ phase }) {
                 PHASES.length) *
               100
             }%`,
+
             background:
               "var(--ts-grad-soft)",
+
             transition: `width ${PHASE_MS}ms linear`,
+
             boxShadow:
               "0 0 12px rgba(255,122,84,.8)",
           }}
@@ -931,7 +903,6 @@ function PhaseTrack({ phase }) {
       </div>
 
       <ul className="flex flex-col gap-1">
-
         {PHASES.map((p, i) => (
           <li
             key={p}
@@ -973,7 +944,6 @@ function PhaseTrack({ phase }) {
             {p}
           </li>
         ))}
-
       </ul>
     </div>
   );
@@ -992,9 +962,7 @@ function IdlePanel({
 
   return (
     <div className="panel h-full w-full">
-
-      <div className="flex h-full min-h-0 flex-col p-5 sm:p-6">
-
+      <div className="flex h-full min-h-0 flex-col overflow-y-auto p-5 sm:p-6">
         <PanelHead
           index="B"
           title="Analysis"
@@ -1015,9 +983,7 @@ function IdlePanel({
         />
 
         <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 text-center">
-
           <div className="relative flex h-20 w-20 flex-shrink-0 items-center justify-center">
-
             <span
               className={`absolute inset-0 rounded-full ${
                 scanning
@@ -1052,11 +1018,9 @@ function IdlePanel({
                   : ""
               }
             />
-
           </div>
 
           <div className="flex flex-col gap-1.5">
-
             <p
               className="t-h3"
               style={{
@@ -1080,7 +1044,6 @@ function IdlePanel({
                 ? "Hold on, the full distribution appears here the moment the model settles."
                 : "Load a slice into the scan bay and hit Run Analysis. The predicted class, confidence, and all four probabilities land here."}
             </p>
-
           </div>
 
           <ul
@@ -1116,6 +1079,7 @@ function IdlePanel({
                     style={{
                       background:
                         "rgba(253,247,242,.06)",
+
                       animation: scanning
                         ? `ts-blink 1.4s ${
                             i * 0.16
@@ -1127,7 +1091,6 @@ function IdlePanel({
               )
             )}
           </ul>
-
         </div>
       </div>
     </div>
@@ -1136,6 +1099,9 @@ function IdlePanel({
 
 /* =====================================================================
    Results Analysis Panel
+   Gauge sits beside the text (not stacked above it) so this block stays
+   compact enough to fit inside the fixed panel height alongside the
+   probability breakdown and the class-info section without clipping.
 ===================================================================== */
 
 function ResultsPanel({
@@ -1169,8 +1135,7 @@ function ResultsPanel({
           "ts-count-in .7s cubic-bezier(.16,1,.3,1) both",
       }}
     >
-      <div className="panel-edge-inner flex h-full min-h-0 flex-col p-5 sm:p-6">
-
+      <div className="panel-edge-inner flex h-full min-h-0 flex-col overflow-y-auto p-5 sm:p-6">
         <PanelHead
           index="B"
           title="Analysis"
@@ -1179,20 +1144,19 @@ function ResultsPanel({
         />
 
         {/* =============================================================
-            MAIN RESULT
+            MAIN RESULT — centered in the available space, gauge and
+            label sized up since this is the headline moment of the panel.
         ============================================================= */}
 
         <div className="mt-3 flex flex-1 flex-col items-center justify-center gap-5 sm:flex-row sm:justify-center sm:gap-8">
-
-          {/* Larger ring, number size controlled inside ConfidenceGauge */}
           <ConfidenceGauge
             value={result.confidence}
             color={info.color}
-            size={220}
+            size={215}
+            stroke={15}
           />
 
           <div className="flex flex-col items-center gap-2 text-center">
-
             <span
               className="t-eyebrow"
               style={{
@@ -1243,9 +1207,7 @@ function ResultsPanel({
                 ].label
               }
             </span>
-
           </div>
-
         </div>
 
         {/* =============================================================
@@ -1259,9 +1221,7 @@ function ResultsPanel({
               "var(--ts-hairline)",
           }}
         >
-
           <div className="mb-2.5 flex items-center justify-between">
-
             <span
               className="t-eyebrow"
               style={{
@@ -1282,7 +1242,6 @@ function ResultsPanel({
             >
               softmax · sums to 100%
             </span>
-
           </div>
 
           <ProbabilityBars
@@ -1293,7 +1252,6 @@ function ResultsPanel({
               result.predicted_class
             }
           />
-
         </div>
 
         {/* =============================================================
@@ -1309,7 +1267,6 @@ function ResultsPanel({
               "1px solid var(--ts-hairline)",
           }}
         >
-
           <span
             className="t-eyebrow"
             style={{
@@ -1328,9 +1285,7 @@ function ResultsPanel({
           >
             {info.detail}
           </p>
-
         </div>
-
       </div>
     </div>
   );
