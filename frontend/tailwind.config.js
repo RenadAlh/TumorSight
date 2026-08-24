@@ -6,6 +6,9 @@ export default {
       screens: {
         // Small phones drop the wordmark and other second-tier chrome.
         xs: "420px",
+
+        // Stubby viewports, phone landscape, mostly.
+        short: { raw: "(max-height: 560px)" },
       },
       colors: {
         abyss: "var(--ts-abyss)",

@@ -29,7 +29,7 @@ import {
 } from "../theme.js";
 
 /* ---------------------------------------------------------------------
-   Mock predictor — used when the API URL field is cleared. Deterministic
+   Mock predictor: used when the API URL field is cleared. Deterministic
    per-file so the same upload always gives the same demo result.
 --------------------------------------------------------------------- */
 
@@ -139,6 +139,61 @@ const PHASES = [
 const PHASE_MS = 620;
 const MIN_SCAN_MS =
   PHASES.length * PHASE_MS;
+
+/* ---------------------------------------------------------------------
+   Phone check for SVG geometry that CSS media queries can't reach.
+--------------------------------------------------------------------- */
+
+function useCompact(
+  query = "(max-width: 1023px)"
+) {
+  const [compact, setCompact] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia(query).matches
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const onChange = (e) => setCompact(e.matches);
+    setCompact(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [query]);
+
+  return compact;
+}
+
+function getDemoLayout() {
+  if (typeof window === "undefined") return "portrait";
+  const vv = window.visualViewport;
+  const w = Math.round(vv?.width ?? window.innerWidth);
+  const h = Math.round(vv?.height ?? window.innerHeight);
+  if (w >= 1024) return "desktop";
+  if (w >= 560 && w > h) return "landscape-phone";
+  return "portrait";
+}
+
+function useDemoLayout() {
+  const [layout, setLayout] = useState(getDemoLayout);
+
+  useEffect(() => {
+    const update = () => setLayout(getDemoLayout());
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+    window.visualViewport?.addEventListener("resize", update);
+    window.visualViewport?.addEventListener("scroll", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+      window.visualViewport?.removeEventListener("resize", update);
+      window.visualViewport?.removeEventListener("scroll", update);
+    };
+  }, []);
+
+  return layout;
+}
 
 export default function Demo() {
   const [liveApi, setLiveApi] = useState(true);
@@ -305,6 +360,10 @@ export default function Demo() {
       ]
     : null;
 
+  const layout = useDemoLayout();
+  const landscapePhone = layout === "landscape-phone";
+  const portraitPhone = layout === "portrait";
+
   return (
     <Band
       tone="canvas"
@@ -314,28 +373,45 @@ export default function Demo() {
         aria-hidden="true"
       />
 
-      <Shell className="relative py-4 lg:py-5">
+      <Shell
+        className={`relative lg:py-5 ${landscapePhone ? "py-1.5" : "py-4"}`}
+      >
         {/* =============================================================
             HEADER
         ============================================================= */}
 
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="flex flex-col gap-3">
-            <Eyebrow>
-              Analysis console
-            </Eyebrow>
+        <div
+          className={`flex flex-wrap items-end justify-between ${landscapePhone ? "gap-1.5" : "gap-4"}`}
+        >
+          <div
+            className={`flex flex-col ${landscapePhone ? "gap-1 min-w-0" : "gap-3"}`}
+          >
+            {!landscapePhone && (
+              <Eyebrow>
+                Analysis console
+              </Eyebrow>
+            )}
 
             <h1
-              className="t-h2"
+              className={landscapePhone ? "font-display text-[0.95rem] font-semibold leading-tight" : "t-h2"}
               style={{
                 color:
                   "var(--ts-cream)",
               }}
             >
-              Load a scan, then{" "}
-              <span className="grad-text">
-                run the model.
-              </span>
+              {landscapePhone ? (
+                <>
+                  Load a scan,{" "}
+                  <span className="grad-text">run the model.</span>
+                </>
+              ) : (
+                <>
+                  Load a scan, then{" "}
+                  <span className="grad-text">
+                    run the model.
+                  </span>
+                </>
+              )}
             </h1>
           </div>
 
@@ -369,18 +445,28 @@ export default function Demo() {
         ============================================================= */}
 
         <div
-          className="mt-5 grid min-h-0 grid-rows-[minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,780px)_minmax(0,1fr)]"
-          style={{
-            height:
-              "calc(100dvh - 260px)",
-            minHeight: "460px",
-          }}
+          className={[
+            "mt-5 grid min-h-0 grid-rows-[minmax(0,1fr)] gap-5",
+            landscapePhone &&
+              "mt-2 grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-2 h-[calc(100dvh-108px)]",
+            "lg:mt-5 lg:grid-cols-[minmax(0,780px)_minmax(0,1fr)] lg:gap-5 lg:h-[calc(100dvh-260px)] lg:min-h-[460px]",
+          ]
+            .filter(Boolean)
+            .join(" ")}
         >
           {/* ===========================================================
               PANEL A · SCAN BAY
           =========================================================== */}
 
-          <section className="panel flex h-full w-full max-w-[780px] min-h-0 flex-col overflow-y-auto p-5 sm:p-6">
+          <section
+            className={[
+              "panel flex w-full min-h-0 flex-col p-5 sm:p-6",
+              landscapePhone && "demo-console-panel h-full overflow-y-auto p-2.5",
+              "lg:h-full lg:max-w-[780px] lg:overflow-y-auto",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
             <PanelHead
               index="A"
               title="Scan bay"
@@ -409,7 +495,15 @@ export default function Demo() {
             {/* Image well */}
 
             <div
-              className="panel-well relative mt-4 flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden"
+              className={[
+                "panel-well relative mt-4 flex w-full flex-1 items-center justify-center overflow-hidden",
+                !landscapePhone &&
+                  "min-h-[min(17rem,52vh)] sm:min-h-[min(22rem,52vh)]",
+                landscapePhone && "mt-2.5 min-h-0",
+                "lg:min-h-0",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               onDragOver={(e) => {
                 e.preventDefault();
                 setDragging(true);
@@ -472,14 +566,20 @@ export default function Demo() {
                 </>
               ) : (
                 <label
-                  className="group relative flex h-full w-full cursor-pointer flex-col items-center justify-center gap-3 text-center"
+                  className={[
+                    "group relative flex h-full w-full cursor-pointer flex-col items-center justify-center text-center",
+                    landscapePhone ? "gap-1.5" : "gap-3",
+                  ].join(" ")}
                   style={{
                     color:
                       "var(--ts-cream-3)",
                   }}
                 >
                   <span
-                    className="flex h-14 w-14 items-center justify-center rounded-md transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-105"
+                    className={[
+                      "flex items-center justify-center rounded-md transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-105",
+                      landscapePhone ? "h-9 w-9" : "h-14 w-14",
+                    ].join(" ")}
                     style={{
                       background:
                         "rgba(253,247,242,.05)",
@@ -488,13 +588,17 @@ export default function Demo() {
                     }}
                   >
                     <UploadCloud
-                      size={22}
+                      size={landscapePhone ? 16 : 22}
                       color="var(--ts-coral)"
                     />
                   </span>
 
                   <span
-                    className="t-h3"
+                    className={
+                      landscapePhone
+                        ? "font-display text-[0.9rem] font-semibold leading-tight"
+                        : "t-h3"
+                    }
                     style={{
                       color:
                         "var(--ts-cream)",
@@ -503,7 +607,13 @@ export default function Demo() {
                     Drop an MRI slice here
                   </span>
 
-                  <span className="text-[0.85rem]">
+                  <span
+                    className={
+                      landscapePhone
+                        ? "text-[0.72rem] leading-snug"
+                        : "text-[0.85rem]"
+                    }
+                  >
                     or click to browse · JPG
                     or PNG
                   </span>
@@ -536,7 +646,9 @@ export default function Demo() {
 
             {/* File meta + controls */}
 
-            <div className="mt-4 flex flex-col gap-3">
+            <div
+              className={`mt-4 flex flex-col gap-3 ${landscapePhone ? "mt-2.5 gap-2" : ""}`}
+            >
               {file && (
                 <div
                   className="flex items-center gap-3 text-[0.78rem]"
@@ -567,6 +679,7 @@ export default function Demo() {
                 status === "done") && (
                 <PhaseTrack
                   phase={phase}
+                  compact={landscapePhone}
                 />
               )}
 
@@ -594,9 +707,9 @@ export default function Demo() {
                 </div>
               )}
 
-              <div className="flex flex-wrap gap-3">
+              <div className="scan-action-row flex gap-3 lg:flex-wrap">
                 <button
-                  className="btn btn-primary flex-1"
+                  className="btn btn-primary lg:flex-1"
                   onClick={run}
                   disabled={
                     !file || scanning
@@ -645,7 +758,15 @@ export default function Demo() {
               PANEL B · ANALYSIS
           =========================================================== */}
 
-          <section className="flex h-full w-full min-w-0 flex-col gap-4 self-stretch">
+          <section
+            className={[
+              "flex w-full min-w-0 flex-col gap-4",
+              landscapePhone && "h-full gap-2.5 self-stretch",
+              "lg:h-full lg:self-stretch",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
             {/* Fixed-height content wrapper */}
 
             <div className="min-h-0 flex-1">
@@ -655,19 +776,28 @@ export default function Demo() {
                 <ResultsPanel
                   result={result}
                   info={info}
+                  landscapePhone={landscapePhone}
                 />
               ) : (
                 <IdlePanel
                   status={status}
                   phase={phase}
+                  landscapePhone={landscapePhone}
                 />
               )}
             </div>
 
-            {/* Disclaimer */}
-
+            {/* Disclaimer: tucked away on landscape phones so the analysis
+                panel keeps its vertical budget for the result itself. */}
+            {!landscapePhone && (
             <div
-              className="flex flex-shrink-0 items-start gap-3 rounded-md p-3.5 text-[0.8rem] leading-relaxed"
+              className={[
+                "demo-disclaimer flex flex-shrink-0 items-start rounded-md",
+                portraitPhone && "gap-2 p-2.5 text-[0.72rem] leading-snug",
+                "lg:gap-3 lg:p-3.5 lg:text-[0.8rem] lg:leading-relaxed",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               style={{
                 background:
                   "rgba(253,247,242,.035)",
@@ -679,7 +809,7 @@ export default function Demo() {
             >
               <Info
                 size={15}
-                className="mt-0.5 flex-shrink-0"
+                className="mt-0.5 flex-shrink-0 max-lg:h-3.5 max-lg:w-3.5"
               />
 
               <span>
@@ -691,6 +821,7 @@ export default function Demo() {
                 anything out.
               </span>
             </div>
+            )}
           </section>
         </div>
       </Shell>
@@ -872,7 +1003,43 @@ function ResultOverlay({ info }) {
    Phase Track
 ===================================================================== */
 
-function PhaseTrack({ phase }) {
+function PhaseTrack({ phase, compact = false }) {
+  if (compact) {
+    return (
+      <div className="flex flex-col gap-1">
+        <div
+          className="h-[3px] w-full overflow-hidden rounded-full"
+          style={{
+            background:
+              "rgba(253,247,242,.08)",
+          }}
+        >
+          <div
+            className="h-full rounded-full"
+            style={{
+              width: `${
+                ((phase + 1) /
+                  PHASES.length) *
+                100
+              }%`,
+              background:
+                "var(--ts-grad-soft)",
+              transition: `width ${PHASE_MS}ms linear`,
+              boxShadow:
+                "0 0 12px rgba(255,122,84,.8)",
+            }}
+          />
+        </div>
+        <span
+          className="t-num truncate text-[0.68rem]"
+          style={{ color: "var(--ts-coral-2)" }}
+        >
+          {PHASES[phase]}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2.5">
       <div
@@ -956,13 +1123,29 @@ function PhaseTrack({ phase }) {
 function IdlePanel({
   status,
   phase,
+  landscapePhone = false,
 }) {
   const scanning =
     status === "scanning";
 
+  // Landscape: essentials only (icon, heading, first two bars), no internal scroll.
+  const idleKeys = landscapePhone
+    ? CLASS_ORDER.slice(0, 2)
+    : CLASS_ORDER;
+
   return (
-    <div className="panel h-full w-full">
-      <div className="flex h-full min-h-0 flex-col overflow-y-auto p-5 sm:p-6">
+    <div
+      className={`panel w-full demo-console-panel ${landscapePhone ? "h-full" : ""} lg:h-full`}
+    >
+      <div
+        className={[
+          "flex min-h-0 flex-col p-5 sm:p-6",
+          landscapePhone && "h-full overflow-hidden p-2.5",
+          "lg:h-full lg:overflow-y-auto",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <PanelHead
           index="B"
           title="Analysis"
@@ -982,8 +1165,19 @@ function IdlePanel({
           }
         />
 
-        <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 text-center">
-          <div className="relative flex h-20 w-20 flex-shrink-0 items-center justify-center">
+        <div
+          className={[
+            "flex min-h-0 flex-1 flex-col items-center justify-center text-center",
+            !landscapePhone && "gap-4 py-7 max-lg:py-7",
+            landscapePhone && "gap-2 py-0",
+            "lg:gap-4 lg:py-0",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <div
+            className={`relative flex flex-shrink-0 items-center justify-center ${landscapePhone ? "h-11 w-11" : "h-20 w-20"}`}
+          >
             <span
               className={`absolute inset-0 rounded-full ${
                 scanning
@@ -997,7 +1191,7 @@ function IdlePanel({
             />
 
             <span
-              className="absolute inset-3 rounded-full"
+              className={`absolute rounded-full ${landscapePhone ? "inset-2" : "inset-3"}`}
               style={{
                 border:
                   "1px dashed rgba(253,247,242,.14)",
@@ -1005,7 +1199,7 @@ function IdlePanel({
             />
 
             <Crosshair
-              size={24}
+              size={landscapePhone ? 16 : 24}
               strokeWidth={1.6}
               color={
                 scanning
@@ -1020,9 +1214,9 @@ function IdlePanel({
             />
           </div>
 
-          <div className="flex flex-col gap-1.5">
+          <div className={`flex flex-col ${landscapePhone ? "gap-0.5" : "gap-1.5"}`}>
             <p
-              className="t-h3"
+              className={landscapePhone ? "font-display text-[0.9rem] font-semibold leading-tight" : "t-h3"}
               style={{
                 color:
                   "var(--ts-cream)",
@@ -1033,31 +1227,33 @@ function IdlePanel({
                 : "No scan analyzed yet"}
             </p>
 
-            <p
-              className="max-w-xs text-[0.86rem] leading-relaxed"
-              style={{
-                color:
-                  "var(--ts-cream-3)",
-              }}
-            >
-              {scanning
-                ? "Hold on, the full distribution appears here the moment the model settles."
-                : "Load a slice into the scan bay and hit Run Analysis. The predicted class, confidence, and all four probabilities land here."}
-            </p>
+            {!landscapePhone && (
+              <p
+                className="max-w-xs text-[0.86rem] leading-relaxed"
+                style={{
+                  color:
+                    "var(--ts-cream-3)",
+                }}
+              >
+                {scanning
+                  ? "Hold on, the full distribution appears here the moment the model settles."
+                  : "Load a slice into the scan bay and hit Run Analysis. The predicted class, confidence, and all four probabilities land here."}
+              </p>
+            )}
           </div>
 
           <ul
-            className="mt-1 flex w-full max-w-xs flex-col gap-2"
+            className={`mt-1 flex w-full max-w-xs flex-col ${landscapePhone ? "gap-1.5" : "gap-2"}`}
             aria-hidden="true"
           >
-            {CLASS_ORDER.map(
+            {idleKeys.map(
               (c, i) => (
                 <li
                   key={c}
                   className="grid items-center gap-3"
                   style={{
                     gridTemplateColumns:
-                      "7rem 1fr",
+                      "clamp(5rem, 28vw, 7rem) minmax(0, 1fr)",
                   }}
                 >
                   <span
@@ -1075,7 +1271,7 @@ function IdlePanel({
                   </span>
 
                   <span
-                    className="h-2.5 rounded-full"
+                    className={`rounded-full ${landscapePhone ? "h-1.5" : "h-2.5"}`}
                     style={{
                       background:
                         "rgba(253,247,242,.06)",
@@ -1107,7 +1303,10 @@ function IdlePanel({
 function ResultsPanel({
   result,
   info,
+  landscapePhone = false,
 }) {
+  const compact = useCompact();
+
   const runnerUp = CLASS_ORDER.filter(
     (c) =>
       c !== result.predicted_class
@@ -1129,13 +1328,21 @@ function ResultsPanel({
 
   return (
     <div
-      className="panel-edge h-full w-full"
+      className={`panel-edge w-full ${landscapePhone ? "h-full" : ""} lg:h-full`}
       style={{
         animation:
           "ts-count-in .7s cubic-bezier(.16,1,.3,1) both",
       }}
     >
-      <div className="panel-edge-inner flex h-full min-h-0 flex-col overflow-y-auto p-5 sm:p-6">
+      <div
+        className={[
+          "panel-edge-inner flex min-h-0 flex-col p-5 sm:p-6",
+          landscapePhone && "h-full overflow-y-auto p-2.5",
+          "lg:h-full lg:overflow-y-auto",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <PanelHead
           index="B"
           title="Analysis"
@@ -1144,16 +1351,25 @@ function ResultsPanel({
         />
 
         {/* =============================================================
-            MAIN RESULT — centered in the available space, gauge and
+            MAIN RESULT: centered in the available space, gauge and
             label sized up since this is the headline moment of the panel.
         ============================================================= */}
 
-        <div className="mt-3 flex flex-1 flex-col items-center justify-center gap-5 sm:flex-row sm:justify-center sm:gap-8">
+        <div
+          className={[
+            "mt-3 flex flex-1 flex-col items-center justify-center gap-5",
+            !landscapePhone && "sm:flex-row sm:justify-center sm:gap-8",
+            landscapePhone && "flex-col gap-4",
+            "lg:flex-row lg:justify-center lg:gap-8",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
           <ConfidenceGauge
             value={result.confidence}
             color={info.color}
-            size={215}
-            stroke={15}
+            size={compact ? 176 : 215}
+            stroke={compact ? 13 : 15}
           />
 
           <div className="flex flex-col items-center gap-2 text-center">
@@ -1168,7 +1384,7 @@ function ResultsPanel({
             </span>
 
             <h3
-              className="font-display text-[2.1rem] font-bold leading-none"
+              className={`font-display font-bold leading-none ${landscapePhone ? "text-[1.5rem]" : "text-[1.75rem]"} lg:text-[2.1rem]`}
               style={{
                 color: info.tint,
                 letterSpacing:
@@ -1233,7 +1449,7 @@ function ResultsPanel({
             </span>
 
             <span
-              className="t-num text-[0.68rem]"
+              className="t-num hidden text-[0.68rem] lg:inline"
               style={{
                 color:
                   "var(--ts-cream-3)",

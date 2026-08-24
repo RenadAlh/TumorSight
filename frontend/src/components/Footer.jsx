@@ -6,15 +6,19 @@ import { Logo, Shell } from "./ui.jsx";
 export default function Footer() {
   return (
     <footer style={{ background: "var(--ts-deep)", borderTop: "1px solid var(--ts-hairline)" }}>
-      <Shell className="flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between">
-        <div className="max-w-sm">
-          <Logo height={80} />
-          <p className="mt-4 text-sm leading-relaxed" style={{ color: "var(--ts-cream-3)" }}>
+      <Shell className="footer-top flex flex-col gap-6 py-8 short:py-5 md:flex-row md:items-center md:justify-between">
+        <div className="footer-brand max-w-sm">
+          <Logo className="footer-logo" height="clamp(52px, 15vw, 80px)" />
+          <p className="footer-tagline mt-4 text-sm leading-relaxed short:mt-2.5" style={{ color: "var(--ts-cream-3)" }}>
             Educational brain tumor MRI classifier. Not a medical device or a substitute for a radiologist.
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-12 md:mr-12">
+        {/* Landscape phones: Source column gets a bit more width so repo
+            names stay on one line; portrait stacks below xs. Spacing for
+            landscape is owned by index.css (Tailwind landscape: variants
+            are unreliable in this build). */}
+        <div className="footer-nav-grid grid grid-cols-1 gap-8 xs:grid-cols-2 sm:gap-10 md:mr-12 md:w-auto">
           <nav className="flex flex-col gap-2.5">
             <span className="t-eyebrow" style={{ color: "var(--ts-cream-3)", opacity: 0.7 }}>
               Pages
@@ -35,7 +39,7 @@ export default function Footer() {
             ))}
           </nav>
 
-          <nav className="flex flex-col gap-2.5">
+          <nav className="footer-source-nav flex min-w-0 flex-col gap-2.5">
             <span className="t-eyebrow" style={{ color: "var(--ts-cream-3)", opacity: 0.7 }}>
               Source
             </span>
@@ -46,7 +50,7 @@ export default function Footer() {
               className="link-underline flex w-fit items-center gap-2 text-sm"
               style={{ color: "var(--ts-cream-2)" }}
             >
-              <Github size={14} /> @RenadAlh
+              <Github size={14} className="flex-shrink-0" /> @RenadAlh
             </a>
             <a
               href="https://github.com/RenadAlh/TumorSight"
@@ -55,7 +59,7 @@ export default function Footer() {
               className="link-underline flex w-fit items-center gap-2 text-sm"
               style={{ color: "var(--ts-cream-2)" }}
             >
-              <Github size={14} /> TumorSight Repository
+              <Github size={14} className="flex-shrink-0" /> TumorSight Repository
             </a>
             <a
               href="https://github.com/RenadAlh/VGG16TumorClassification"
@@ -64,19 +68,19 @@ export default function Footer() {
               className="link-underline flex w-fit items-center gap-2 text-sm"
               style={{ color: "var(--ts-cream-2)" }}
             >
-              <Github size={14} /> Model Search Repository
+              <Github size={14} className="flex-shrink-0" /> Model Search Repository
             </a>
           </nav>
         </div>
       </Shell>
 
       <div style={{ borderTop: "1px solid var(--ts-hairline)" }}>
-        <Shell className="flex flex-col gap-2 py-5 sm:flex-row sm:items-center sm:justify-between">
-          <span className="t-num text-xs" style={{ color: "var(--ts-cream-3)", opacity: 0.75 }}>
+        <Shell className="flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 py-5">
+          <span
+            className="min-w-0 max-w-full text-xs leading-snug"
+            style={{ color: "var(--ts-cream-3)", opacity: 0.75 }}
+          >
             © {new Date().getFullYear()} TumorSight · Built with ❤️ by Renad Alharthi
-          </span>
-          <span className="t-num text-xs" style={{ color: "var(--ts-cream-3)", opacity: 0.75 }}>
-            VGG16 · 4-classes · Recall 95.48%
           </span>
         </Shell>
       </div>

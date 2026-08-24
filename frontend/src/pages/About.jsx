@@ -95,12 +95,12 @@ export default function About() {
   return (
     <>
       {/* ============================== INTRO ============================== */}
-      <Band tone="canvas" className="overflow-hidden">
+      <Band tone="canvas" className="about-hero-band overflow-hidden">
         <Aurora />
         <div className="grid-veil pointer-events-none absolute inset-0 opacity-50" aria-hidden="true" />
 
-        <Shell className="relative grid gap-8 py-12 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:py-16">
-          <div className="flex flex-col gap-5">
+        <Shell className="about-hero-shell relative grid gap-8 py-12 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:py-16">
+          <div className="about-hero-copy flex flex-col gap-5">
             <Reveal>
               <Eyebrow>About the system</Eyebrow>
             </Reveal>
@@ -155,8 +155,14 @@ export default function About() {
             </Reveal>
           </div>
 
-          <Reveal delay={220} className="flex justify-center lg:justify-end">
-            <div className="relative flex h-[340px] w-[340px] items-center justify-center lg:-translate-x-16">
+          <Reveal delay={220} className="about-brain-slot flex justify-center lg:justify-end">
+            <div
+              className="about-brain-mark relative flex items-center justify-center lg:-translate-x-16"
+              style={{
+                width: "min(340px, 74vw, 62vh)",
+                height: "min(340px, 74vw, 62vh)",
+              }}
+            >
               <span
                 className="pulse-ring absolute inset-0 rounded-full"
                 style={{ border: "1px solid rgba(255,171,122,.45)" }}
@@ -169,7 +175,7 @@ export default function About() {
                 className="absolute inset-6 rounded-full"
                 style={{ border: "1px dashed rgba(253,247,242,.16)" }}
               />
-              <LogoMark size={260} />
+              <LogoMark size="min(260px, 57vw, 48vh)" />
             </div>
           </Reveal>
         </Shell>
@@ -188,9 +194,9 @@ export default function About() {
             />
           </Reveal>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-3">
+          <div className="mt-8 grid items-stretch gap-6 sm:grid-cols-3 max-lg:landscape:gap-4">
             {METRICS.map((m, i) => (
-              <Reveal key={m.label} delay={i * 130}>
+              <Reveal key={m.label} delay={i * 130} className="h-full">
                 <MetricDial label={m.label} value={m.value} note={m.note} />
               </Reveal>
             ))}
@@ -305,7 +311,7 @@ export default function About() {
               <span className="t-num text-[0.78rem]" style={{ color: "var(--ts-cream-3)", opacity: 0.6 }}>
                 →
               </span>
-              <span className="t-num text-[0.78rem]" style={{ color: "var(--ts-cream-2)" }}>
+              <span className="t-num min-w-0 break-all text-[0.78rem]" style={{ color: "var(--ts-cream-2)" }}>
                 {"{ predicted_class, confidence, probabilities }"}
               </span>
             </div>
@@ -366,12 +372,12 @@ export default function About() {
       </Band>
 
       {/* ====================== DISCLAIMER + DEVELOPER ===================== */}
-      <Band tone="canvas" className="overflow-hidden">
+      <Band tone="canvas" className="about-end-band overflow-hidden">
         <Aurora className="opacity-60" />
-        <Shell className="relative flex flex-col gap-4 py-10 lg:py-12">
+        <Shell className="about-end-shell relative flex flex-col gap-4 py-10 lg:py-12 max-lg:landscape:gap-3 max-lg:landscape:py-6">
           <Reveal>
             <div
-              className="relative overflow-hidden rounded-lg"
+              className="about-end-card about-disclaimer-card relative overflow-hidden rounded-lg"
               style={{
                 background: "linear-gradient(135deg, rgba(125,45,92,.34), rgba(10,22,21,.35) 62%)",
                 border: "1px solid rgba(201,77,118,.42)",
@@ -383,25 +389,28 @@ export default function About() {
                 aria-hidden="true"
               />
 
-              <div className="relative flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:p-5">
+              <div className="about-end-card-inner relative flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:p-5 max-lg:landscape:gap-2 max-lg:landscape:p-3">
                 <div
-                  className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-md"
+                  className="about-end-icon flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-md max-lg:landscape:h-9 max-lg:landscape:w-9"
                   style={{
                     background: "rgba(201,77,118,.18)",
                     border: "1px solid rgba(201,77,118,.45)",
                     boxShadow: "0 14px 30px -14px rgba(201,77,118,.9)",
                   }}
                 >
-                  <ShieldAlert size={26} color="var(--ts-coral-2)" strokeWidth={2} />
+                  <ShieldAlert size={26} color="var(--ts-coral-2)" strokeWidth={2} className="max-lg:landscape:h-5 max-lg:landscape:w-5" />
                 </div>
 
-                <div className="min-w-0 flex-1">
-                  <h2 className="font-display text-[1.1rem] font-bold leading-tight" style={{ color: "var(--ts-cream)", letterSpacing: "-0.03em" }}>
-                      Educational tool, not a diagnostic device.
-                    </h2>
+                <div className="about-disclaimer-copy min-w-0 flex-1">
+                  <h2
+                    className="about-disclaimer-title font-display text-[1.1rem] font-bold leading-tight max-lg:landscape:text-[0.95rem]"
+                    style={{ color: "var(--ts-cream)", letterSpacing: "-0.03em" }}
+                  >
+                    Educational tool, not a diagnostic device.
+                  </h2>
 
                   <p
-                    className="mt-1 max-w-3xl text-[0.82rem] leading-snug"
+                    className="about-disclaimer-body mt-1 max-w-3xl text-[0.82rem] leading-snug max-lg:landscape:mt-0.5 max-lg:landscape:text-[0.75rem]"
                     style={{ color: "var(--ts-cream-2)" }}
                   >
                     TumorSight is a personal project, not a medical device. Its outputs should not inform clinical decisions.
@@ -413,34 +422,40 @@ export default function About() {
 
           {/* developer credit */}
           <Reveal delay={120}>
-            <div className="panel panel-hover relative overflow-hidden">
+            <div className="about-end-card about-dev-shell panel panel-hover relative overflow-hidden">
               <div
                 className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full"
                 style={{ background: "radial-gradient(circle, rgba(255,122,84,.28), transparent 70%)" }}
                 aria-hidden="true"
               />
-              <div className="relative flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
-                <div className="flex items-center gap-4">
+              <div className="about-dev-card about-end-card-inner relative flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+                <div className="about-dev-identity flex min-w-0 items-center gap-4">
                   <img
                     src={profilePhoto}
                     alt="Renad Alharthi"
-                    className="h-14 w-14 flex-shrink-0 rounded-md object-cover"
+                    className="about-dev-avatar h-14 w-14 flex-shrink-0 rounded-md object-cover"
                     style={{
                       boxShadow: "0 14px 30px -14px rgba(255,122,84,.9)",
                     }}
                   />
-                  <div className="flex flex-col gap-0.5">
-                    <Eyebrow>Designed &amp; built by</Eyebrow>
-                    <h2 className="font-display text-[1.1rem] font-bold leading-tight" style={{ color: "var(--ts-cream)", letterSpacing: "-0.03em" }}>
+                  <div className="about-dev-copy flex min-w-0 flex-col gap-0.5">
+                    <Eyebrow className="about-dev-eyebrow">Designed &amp; built by</Eyebrow>
+                    <h2
+                      className="about-dev-name font-display text-[1.1rem] font-bold leading-tight max-lg:landscape:text-[0.95rem]"
+                      style={{ color: "var(--ts-cream)", letterSpacing: "-0.03em" }}
+                    >
                       Renad Alharthi
                     </h2>
-                    <p className="text-[0.8rem]" style={{ color: "var(--ts-cream-2)" }}>
+                    <p
+                      className="about-dev-role text-[0.8rem] max-lg:landscape:text-[0.72rem] max-lg:landscape:leading-snug"
+                      style={{ color: "var(--ts-cream-2)" }}
+                    >
                       Artificial Intelligence Engineer · Model, API & Interface
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="about-dev-actions flex flex-wrap gap-2">
                   <a
                     href="https://github.com/RenadAlh"
                     target="_blank"

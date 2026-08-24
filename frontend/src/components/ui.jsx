@@ -15,12 +15,13 @@ import logoMark from "../assets/logo-mark.svg";
    aspect-ratio placeholder stretches the mark.
    ===================================================================== */
 export function LogoMark({ size = 34, className = "" }) {
+  const attr = typeof size === "number" ? size : 768;
   return (
     <img
       src={logoMark}
       alt=""
-      width={size}
-      height={size}
+      width={attr}
+      height={attr}
       className={`block ${className}`}
       style={{ width: size, height: size, maxWidth: "none" }}
       aria-hidden="true"
@@ -28,7 +29,8 @@ export function LogoMark({ size = 34, className = "" }) {
   );
 }
 
-/** The full lockup. Height-driven; the aspect ratio comes from the file. */
+/** The full lockup. Height-driven; the aspect ratio comes from the file.
+ *  `height` may also be a CSS length string (e.g. "clamp(52px, 15vw, 80px)"). */
 export function Logo({ height = 34, className = "" }) {
   return (
     <img

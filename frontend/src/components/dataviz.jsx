@@ -110,12 +110,13 @@ export function ConfidenceGauge({
       className="relative inline-flex flex-shrink-0 items-center justify-center"
       style={{
         width: size,
-        height: size,
+        maxWidth: "100%",
+        aspectRatio: "1 / 1",
       }}
     >
       <svg
-        width={size}
-        height={size}
+        width="100%"
+        height="100%"
         viewBox={`0 0 ${size} ${size}`}
         role="img"
         aria-label={`${label} ${pct}%`}
@@ -358,7 +359,7 @@ function ProbRow({
       className="grid items-center gap-x-3"
       style={{
         gridTemplateColumns:
-          "7.5rem 1fr 3.6rem",
+          "clamp(5.5rem, 26vw, 7.5rem) minmax(0, 1fr) 3.6rem",
         opacity: isTop ? 1 : 0.72,
       }}
     >
@@ -460,9 +461,9 @@ export function MetricDial({
   );
 
   return (
-    <div className="panel-warm panel-hover flex flex-col items-center gap-4 p-7 text-center">
+    <div className="panel-warm panel-hover flex h-full flex-col items-center gap-4 p-7 text-center max-lg:landscape:gap-3 max-lg:landscape:p-4">
       <div
-        className="relative"
+        className="relative flex-shrink-0"
         style={{
           width: size,
           height: size,
@@ -539,7 +540,7 @@ export function MetricDial({
         </div>
       </div>
 
-      <div>
+      <div className="mt-auto flex min-h-[3.25rem] flex-col justify-start max-lg:landscape:min-h-[2.75rem]">
         <div
           className="t-h3"
           style={{
@@ -550,7 +551,7 @@ export function MetricDial({
         </div>
 
         <p
-          className="mt-1.5 text-[0.83rem] leading-relaxed"
+          className="mt-1.5 text-[0.83rem] leading-relaxed max-lg:landscape:mt-1 max-lg:landscape:line-clamp-2 max-lg:landscape:text-[0.75rem]"
           style={{
             color:
               "var(--ts-ink-2)",

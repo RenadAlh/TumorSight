@@ -46,7 +46,7 @@ export default function Landing() {
         <Aurora />
         <div className="grid-veil pointer-events-none absolute inset-0 opacity-[0.55]" aria-hidden="true" />
 
-        <Shell className="relative grid items-center gap-8 pb-14 pt-10 lg:grid-cols-[1.02fr_1fr] lg:gap-10 lg:pb-16 lg:pt-12">
+        <Shell className="relative grid items-center gap-8 pb-14 pt-10 short:gap-5 short:pb-8 short:pt-6 lg:grid-cols-[1.02fr_1fr] lg:gap-10 lg:pb-16 lg:pt-12">
           {/* ---- copy ---- */}
           <div className="flex flex-col items-start gap-5">
             <Reveal>
@@ -68,7 +68,7 @@ export default function Landing() {
               </p>
             </Reveal>
 
-            <Reveal delay={250} className="flex flex-wrap items-center gap-3">
+            <Reveal delay={250} className="hero-cta-row lg:flex lg:flex-wrap lg:items-center lg:gap-3">
               <Link to="/demo" className="btn btn-primary">
                 <Crosshair size={17} strokeWidth={2.4} />
                 Run Analysis
@@ -79,17 +79,17 @@ export default function Landing() {
               </a>
             </Reveal>
 
-            <Reveal delay={330} className="flex flex-wrap items-center gap-x-7 gap-y-3 pt-2">
+            <Reveal delay={330} className="hero-stats-row lg:flex lg:flex-wrap lg:items-center lg:gap-x-7 lg:gap-y-3 lg:pt-2">
               {[
                 ["95.48%", "Recall"],
                 ["4", "Classes"],
                 ["1", "MRI → Diagnosis"],
               ].map(([v, l]) => (
-                <div key={l} className="flex items-baseline gap-2">
-                  <span className="t-num text-lg font-bold" style={{ color: "var(--ts-coral-2)" }}>
+                <div key={l} className="hero-stat flex items-baseline gap-2">
+                  <span className="hero-stat-value t-num text-lg font-bold lg:text-lg" style={{ color: "var(--ts-coral-2)" }}>
                     {v}
                   </span>
-                  <span className="t-eyebrow" style={{ color: "var(--ts-cream-3)" }}>
+                  <span className="hero-stat-label t-eyebrow lg:text-[inherit]" style={{ color: "var(--ts-cream-3)" }}>
                     {l}
                   </span>
                 </div>
@@ -98,8 +98,8 @@ export default function Landing() {
           </div>
 
           {/* ---- focal scan bay ---- */}
-          <Reveal delay={200} className="relative">
-            <div className="panel relative aspect-square w-full overflow-hidden sm:aspect-[5/4] lg:aspect-square">
+          <Reveal delay={200} className="relative min-w-0 max-lg:w-full">
+            <div className="hero-brain-panel panel relative w-full overflow-hidden sm:aspect-[5/4] lg:aspect-square lg:max-h-none">
               <div className="grid-veil absolute inset-0 opacity-70" aria-hidden="true" />
               <div
                 className="absolute inset-0"
@@ -110,12 +110,14 @@ export default function Landing() {
                 aria-hidden="true"
               />
 
-              <BrainScene interactive className="absolute inset-0" />
+              <div className="hero-brain-scene absolute inset-0">
+                <BrainScene interactive className="absolute inset-0" />
+              </div>
 
               {/* corner brackets: the "instrument" framing */}
               <CornerBrackets />
 
-              <div className="pointer-events-none absolute left-5 top-5 flex items-center gap-2">
+              <div className="pointer-events-none absolute left-5 top-5 flex items-center gap-2 max-lg:landscape:left-3 max-lg:landscape:top-3">
                 <span className="chip">
                   <span
                     className="blink inline-block h-1.5 w-1.5 rounded-full"
@@ -125,12 +127,12 @@ export default function Landing() {
                 </span>
               </div>
 
-              <div className="pointer-events-none absolute bottom-5 left-5">
+              <div className="pointer-events-none absolute bottom-5 left-5 max-lg:landscape:bottom-3 max-lg:landscape:left-3">
                 <span className="chip">
                   <RotateCw size={12} /> Drag to rotate
                 </span>
               </div>
-              <div className="pointer-events-none absolute bottom-5 right-5">
+              <div className="pointer-events-none absolute bottom-5 right-5 hidden xs:block max-lg:landscape:bottom-3 max-lg:landscape:right-3">
                 <span className="t-num text-[0.68rem]" style={{ color: "var(--ts-cream-3)", opacity: 0.75 }}>
                   ref/brain · idle
                 </span>
@@ -164,7 +166,7 @@ export default function Landing() {
 
       {/* ========================== HOW TO USE =========================== */}
       <Band tone="warm" id="how-it-works" className="overflow-hidden">
-        <Shell className="py-14 lg:py-20">
+        <Shell className="py-14 short:py-8 lg:py-20">
           <Reveal>
             <SectionHead
               tone="warm"
@@ -226,7 +228,7 @@ export default function Landing() {
       {/* ======================== WHAT IT SEPARATES ======================= */}
       <Band tone="canvas" className="overflow-hidden">
         <Aurora className="opacity-60" />
-        <Shell className="relative py-14 lg:py-20">
+        <Shell className="relative py-14 short:py-8 lg:py-20">
           <Reveal>
             <SectionHead
               eyebrow="The four classes"
@@ -275,7 +277,7 @@ export default function Landing() {
   <Shell className="py-8 lg:py-10">
     <Reveal>
       <div
-        className="relative overflow-hidden rounded-lg p-4 sm:p-5"
+        className="landing-disclaimer relative overflow-hidden rounded-lg p-4 sm:p-5 max-lg:p-3.5"
         style={{
           background:
             "linear-gradient(135deg, rgba(125,45,92,.34), rgba(10,22,21,.35) 62%)",
@@ -283,7 +285,7 @@ export default function Landing() {
         }}
       >
         <div
-          className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full"
+          className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full max-lg:h-28 max-lg:w-28"
           style={{
             background:
               "radial-gradient(circle, rgba(201,77,118,.35), transparent 70%)",
@@ -291,10 +293,9 @@ export default function Landing() {
           aria-hidden="true"
         />
 
-        <div className="relative flex items-center gap-4">
-          {/* Warning icon */}
+        <div className="relative flex items-start gap-4 max-lg:gap-3">
           <div
-            className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-md"
+            className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-md max-lg:h-10 max-lg:w-10"
             style={{
               background: "rgba(201,77,118,.18)",
               border: "1px solid rgba(201,77,118,.45)",
@@ -305,22 +306,22 @@ export default function Landing() {
               size={26}
               color="var(--ts-coral-2)"
               strokeWidth={2}
+              className="max-lg:h-[18px] max-lg:w-[18px]"
             />
           </div>
 
-          {/* Disclaimer content */}
           <div className="min-w-0 flex-1">
             <Eyebrow>Disclaimer</Eyebrow>
 
             <h2
-              className="t-h3 mt-1"
+              className="t-h3 mt-1 max-lg:text-[0.95rem] max-lg:leading-snug"
               style={{ color: "var(--ts-cream)" }}
             >
               This is an educational tool, not a diagnostic device.
             </h2>
 
             <ul
-              className="mt-2 flex max-w-5xl flex-col gap-1 text-[0.8rem] leading-snug"
+              className="mt-2 flex max-w-5xl flex-col gap-1 text-[0.8rem] leading-snug max-lg:mt-1.5 max-lg:gap-0.5 max-lg:text-[0.72rem]"
               style={{ color: "var(--ts-cream-2)" }}
             >
               <li className="flex gap-2.5">
