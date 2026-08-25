@@ -223,7 +223,7 @@ single-page app. Neither imports from the other, they meet only at `POST /predic
 ```
 TumorSight/
 │
-├── backend/                                  Inference service — Docker → Azure Container Apps
+├── backend/                                  Inference service, Docker → Azure Container Apps
 │   ├── app.py                                FastAPI app: model load, MRI validation, /predict
 │   ├── vgg16_tumor_model_95_accuracy.h5      Trained model, 175 MB, tracked via Git LFS
 │   ├── requirements.txt                      Pinned Python dependencies
@@ -254,7 +254,7 @@ TumorSight/
 │   ├── tailwind.config.js                    Tailwind theme extension
 │   └── package.json                          Frontend dependencies and scripts
 │
-└── assets/                                   Screenshots used in this README
+└── assets/                                   Images used in this README
 ```
 
 ## 08 · Quick start
