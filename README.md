@@ -1,42 +1,404 @@
-# TumorSight
+<div align="center">
 
-An interactive 3D demo for classifying brain tumor MRI scans — built on
-top of the VGG16 classifier from
-[VGG16TumorClassification](https://github.com/RenadAlh/VGG16TumorClassification).
+<div style="margin-left: -20px;">
+  <img src="frontend/src/assets/logo-full.svg" alt="TumorSight" width="360" />
+</div>
 
-Upload an MRI slice, and a rotatable 3D brain reacts to the prediction —
-a particle pulse animates at a stylized marker for the predicted tumor
-type (glioma, meningioma, pituitary, or no tumor), alongside a
-confidence breakdown.
 
-## How it works
 
-1. **Backend** (`backend/`) — a FastAPI service wrapping the trained
-   VGG16 model (95.4% test accuracy). Exposes a single `POST /predict`
-   endpoint: image in, `{predicted_class, confidence, probabilities}`
-   JSON out. See `backend/README.md` for deployment instructions
-   (Google Cloud Run, free tier).
-2. **Frontend** (`frontend/TumorSight.jsx`) — a React + Three.js demo:
-   drag to rotate a stylized, noise-displaced 3D brain mesh, upload an
-   MRI scan, and watch it react to the classifier's prediction.
+<div style="color: #bf4677; font-size: 28px; font-weight: 700;">
+  Bringing Brain Tumors Into Sight
+</div>
+<br />
+<div>
+  An intelligent web-based system that leverages deep learning to classify brain tumors from MRI scans, delivering interpretable predictions through a seamless interactive experience.
+</div>
+<br />
 
-## Relationship to VGG16TumorClassification
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-c94d76?style=flat-square&logo=target&logoColor=fdf7f2)](https://tumorsight.vercel.app)
+[![Model Repo](https://img.shields.io/badge/Model%20Repo-c94d76?style=flat-square&logo=github)](https://github.com/RenadAlh/VGG16TumorClassification)
+![Production Ready](https://img.shields.io/badge/Production%20Ready-5d9d90?style=flat-square)
 
-This repo is the applied/demo layer on top of the model developed in
-[VGG16TumorClassification](https://github.com/RenadAlh/VGG16TumorClassification)
-— that repo holds the training notebook, architecture experiments, and
-model weights; this one turns the trained model into something you can
-click through and watch respond live.
+</div>
 
-## Honesty note
 
-The model classifies tumor **type** from the scan — it does not localize
-the tumor's position. The 3D demo's highlighted marker is a stylized,
-illustrative indicator of the predicted class, not a detected location.
-Educational/portfolio demo only, not a diagnostic tool.
+## 01 · Overview
 
-## Setup
+<div align="center">
 
-See `backend/README.md` to deploy the API, then open the frontend and
-paste your deployed API URL into the "API endpoint" field — it works in
-mocked/demo mode with no backend connected too.
+TumorSight combines a [VGG16-based model](https://github.com/RenadAlh/VGG16TumorClassification) with an interactive web interface to classify brain MRI slices and make the results easy to explore. Upload a scan, run the analysis, and see the prediction alongside its confidence and full probability breakdown.
+ 
+
+```
+     SCAN                 AI                  INSIGHT
+   │                   │                      │
+   ▼                   ▼                      ▼
+    MRI SLICE  ───▶  VGG16  +  SOFTMAX  ───▶   PREDICTION
+```
+ 
+**Glioma · Meningioma · Pituitary · No Tumor**
+ 
+
+https://github.com/user-attachments/assets/30219e45-9452-47d7-9ef8-87d55e661a92
+ 
+<sub>Explore TumorSight end to end! landing, analysis, and about.</sub>
+ 
+</div>
+
+## 02 · The experience
+
+### 01 · Analyze a scan
+
+<div align="center">
+
+<img src="assets/ts-analysis.png" alt="TumorSight analysis interface" width="850" />
+
+</div>
+
+<br>
+
+TumorSight's analysis console guides reviewers seamlessly from raw MRI Image ingestion to an interpretable output.
+ 
+1. **Upload:** Drag and drop an MRI slice into the secure analysis bay with automated format pre-checking.
+2. **Analyze:** Run the VGG16 model to evaluate tensor features and check prediction thresholds.
+3. **Interpret:** Review the confidence score, probability breakdown bars, and detailed class insights.
+
+<br>
+
+---
+
+### 02 · Built for every screen
+
+<div align="center">
+
+<img src="assets/ts-cross-devices.png" alt="TumorSight responsive interface across devices" width="850" />
+
+</div>
+
+<br>
+
+TumorSight is designed as a responsive experience across desktop, tablet, and mobile, with dedicated layouts for both portrait and landscape orientations. Height-constrained screens receive their own treatment so the interface remains usable without sacrificing the core experience.
+
+<br>
+
+## 03 · Features
+ 
+<table border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: none;">
+<tr>
+<td width="33%" valign="top" style="border: none;">
+<div style="background: #102523; border-left: 4px solid #ff7a54; border-radius: 8px; padding: 16px 18px; height: 100%;">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Full context, not one label</div>
+<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Every prediction includes the class, a confidence score, and the full probability breakdown across all four classes.</div>
+</div>
+</td>
+<td width="33%" valign="top" style="border: none;">
+<div style="background: #102523; border-left: 4px solid #c94d76; border-radius: 8px; padding: 16px 18px; height: 100%;">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Recall-optimized model</div>
+<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Tuned and evaluated on recall first, 95.48%, since missing a real tumor costs more than a false alarm.</div>
+</div>
+</td>
+<td width="33%" valign="top" style="border: none;">
+<div style="background: #102523; border-left: 4px solid #7d2d5c; border-radius: 8px; padding: 16px 18px; height: 100%;">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Interactive 3D brain</div>
+<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">A rotatable brain scene, built with Three.js, lives on the landing page as part of the interface itself.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top" style="border: none;">
+<div style="background: #102523; border-left: 4px solid #57cbb6; border-radius: 8px; padding: 16px 18px; height: 100%;">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Input validated first</div>
+<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Uploads are checked for grayscale MRI content before they ever reach the model, rejecting anything else.</div>
+</div>
+</td>
+<td width="33%" valign="top" style="border: none;">
+<div style="background: #102523; border-left: 4px solid #ff7a54; border-radius: 8px; padding: 16px 18px; height: 100%;">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Rate limited by design</div>
+<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Ten requests per minute per IP address, protecting the deployed model from casual abuse or overload.</div>
+</div>
+</td>
+<td width="33%" valign="top" style="border: none;">
+<div style="background: #102523; border-left: 4px solid #c94d76; border-radius: 8px; padding: 16px 18px; height: 100%;">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Privacy-first system</div>
+<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Scans are processed in memory for a single prediction only, never written to disk, logged, or retained anywhere.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top" style="border: none;">
+<div style="background: #102523; border-left: 4px solid #7d2d5c; border-radius: 8px; padding: 16px 18px; height: 100%;">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Built for real devices</div>
+<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Desktop, tablet, and phone, portrait and landscape, are each tuned layouts, not one design squeezed to fit.</div>
+</div>
+</td>
+</td>
+<td width="33%" valign="top" style="border: none;">
+<div style="background: #102523; border-left: 4px solid #57cbb6; border-radius: 8px; padding: 16px 18px; height: 100%;">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Consistent, low latency</div>
+<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">The 175 MB model stays loaded in memory at all times, so every request returns a prediction quickly.</div>
+</div>
+</td>
+<td width="33%" valign="top" style="border: none;">
+<div style="background: #102523; border-left: 4px solid #ff7a54; border-radius: 8px; padding: 16px 18px; height: 100%;">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Zero install required</div>
+<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">No setup and no local model download, open the live demo in a browser and upload a scan to try it.</div>
+</div>
+</td>
+</tr>
+</table>
+<br />
+
+
+
+## 04 · Model
+
+TumorSight uses a VGG16 backbone pretrained on ImageNet, followed by Global Average Pooling, a 128-unit ELU hidden layer, and a 4-unit softmax output layer. The pretrained features are fine-tuned on brain MRI slices for tumor classification.
+
+For the full architecture, experiments, and training process, see the [Model Research Repository.](https://github.com/RenadAlh/VGG16TumorClassification) 
+
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'background':'#4b5563', 'lineColor':'#fdf7f2', 'textColor':'#fdf7f2'}}}%%
+flowchart LR
+    A["MRI Slice"] --> B["Resize<br/>224 × 224"]
+    B --> C["Rescale<br/>1 / 255"]
+    C --> D["VGG16<br/>ImageNet"]
+    D --> E["Fine-Tuned<br/>Layers"]
+    E --> F["Global Average<br/>Pooling"]
+    F --> G["Dense + ELU"]
+    G --> H["Dropout"]
+    H --> I["Softmax"]
+    I --> J["Glioma"]
+    I --> K["Meningioma"]
+    I --> L["Pituitary"]
+    I --> M["No Tumor"]
+
+    linkStyle default stroke:#fdf7f2,stroke-width:2px;
+    classDef tumor fill:#431a2b,stroke:#c94d76,color:#fdf7f2;
+    class A,B,C,D,E,F,G,H,I,J,K,L,M tumor;
+```
+<br>
+
+<div align="center">
+
+<table align="center">
+  <tr>
+    <th width="300"><div align="center">Metric</div></th>
+    <th width="300"><div align="center">Value</div></th>
+  </tr>
+  <tr>
+    <td><div align="center"><strong>Recall</strong></div></td>
+    <td><div align="center"><strong>95.48%</strong></div></td>
+  </tr>
+  <tr>
+    <td><div align="center">Precision</div></td>
+    <td><div align="center">95.54%</div></td>
+  </tr>
+  <tr>
+    <td><div align="center">F1-score</div></td>
+    <td><div align="center">95.45%</div></td>
+  </tr>
+</table>
+
+</div>
+ 
+ 
+>> **Recall is the primary metric.** 
+> In medical classification, missing a real tumor is more costly than a false positive, so the model prioritizes detecting actual tumor cases over overall accuracy.
+
+<br>
+
+
+## 05 · Tech stack
+
+<table>
+<tr>
+<td width="25%" valign="top" style="border: none;">
+<div style="background: #102523; border-radius: 8px; padding: 18px 18px; height: 100%; min-height: 210px; box-shadow: 0 0 26px -8px rgba(87,203,182,0.45);">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">Artificial Intelligence</div>
+<img src="https://img.shields.io/badge/Python-123634?style=flat-square&logo=python&logoColor=57cbb6" alt="Python" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/TensorFlow-123634?style=flat-square&logo=tensorflow&logoColor=57cbb6" alt="TensorFlow" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/Keras-123634?style=flat-square&logo=keras&logoColor=57cbb6" alt="Keras" style="margin: 2px 2px 2px 0;" />
+<div style="margin-top: 8px;"><a href="https://github.com/RenadAlh/VGG16TumorClassification"><img src="https://img.shields.io/badge/VGG16-123634?style=flat-square&logoColor=57cbb6" alt="VGG16" /></a></div>
+</div>
+</td>
+<td width="25%" valign="top" style="border: none;">
+<div style="background: #102523; border-radius: 8px; padding: 18px 18px; height: 100%; min-height: 210px; box-shadow: 0 0 26px -8px rgba(201,77,118,0.45);">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">Backend</div>
+<img src="https://img.shields.io/badge/FastAPI-431a2b?style=flat-square&logo=fastapi&logoColor=fdf7f2" alt="FastAPI" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/Docker-431a2b?style=flat-square&logo=docker&logoColor=fdf7f2" alt="Docker" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/Azure_Container_Apps-431a2b?style=flat-square&logo=microsoftazure&logoColor=fdf7f2" alt="Azure" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/Uvicorn-431a2b?style=flat-square&logoColor=fdf7f2" alt="Uvicorn" style="margin-top: 8px;" />
+<img src="https://img.shields.io/badge/SlowAPI-431a2b?style=flat-square&logoColor=fdf7f2" alt="SlowAPI" style="margin-top: 8px;" />
+</div>
+</td>
+<td width="25%" valign="top" style="border: none;">
+<div style="background: #102523; border-radius: 8px; padding: 18px 18px; height: 100%; min-height: 210px; box-shadow: 0 0 26px -8px rgba(255,171,122,0.4);">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">Frontend</div>
+<img src="https://img.shields.io/badge/React-7d2d5c?style=flat-square&logo=react&logoColor=ffab7a" alt="React" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/Vite-7d2d5c?style=flat-square&logo=vite&logoColor=ffab7a" alt="Vite" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/Three.js-7d2d5c?style=flat-square&logo=three.js&logoColor=ffab7a" alt="Three.js" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/Vercel-7d2d5c?style=flat-square&logo=vercel&logoColor=ffab7a" alt="Vercel" style="margin: 2px 2px 2px 0;" />
+<div style="margin-top: 8px;"><a href="https://www.tripo3d.ai"><img src="https://img.shields.io/badge/Tripo-7d2d5c?style=flat-square&logoColor=ffab7a" alt="Tripo" /></a></div>
+</div>
+</td>
+<td width="25%" valign="top" style="border: none;">
+<div style="background: #102523; border-radius: 8px; padding: 18px 18px; height: 100%; min-height: 210px; box-shadow: 0 0 26px -8px rgba(255,122,84,0.45);">
+<div style="color: #fdf7f2; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">Development</div>
+<img src="https://img.shields.io/badge/Git-ff7a54?style=flat-square&logo=git&logoColor=24100c" alt="Git" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/GitHub-ff7a54?style=flat-square&logo=github&logoColor=24100c" alt="GitHub" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/VS_Code-ff7a54?style=flat-square&logo=visualstudiocode&logoColor=24100c" alt="VS Code" style="margin: 2px 2px 2px 0;" />
+<img src="https://img.shields.io/badge/Cursor-ff7a54?style=flat-square&logoColor=24100c" alt="Cursor" style="margin: 2px 2px 2px 0;" />
+</div>
+</td>
+</tr>
+</table>
+
+<br>
+
+## 06 · System
+
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'background':'#4b5563', 'primaryColor':'#431a2b', 'primaryTextColor':'#fdf7f2', 'primaryBorderColor':'#c94d76', 'lineColor':'#fdf7f2', 'textColor':'#fdf7f2'}}}%%
+flowchart TD
+    subgraph Browser["Client — Vercel"]
+        A1["Upload MRI slice"] --> A2["React interface"]
+        A2 --> A3["Analysis console<br/> + probability bars"]
+    end
+ 
+    subgraph API["API — Azure Container Apps"]
+        B1["FastAPI /predict"] --> B2{"Grayscale-like?"}
+        B2 -->|"no"| B3["422 rejected"]
+        B2 -->|"yes"| B4["VGG16 inference"]
+        B4 --> B5{"Confidence<br/>above threshold?"}
+        B5 -->|"no"| B3
+        B5 -->|"yes"| B6["prediction JSON"]
+    end
+ 
+    A2 -->|"POST multipart/form-data"| B1
+    B3 -->|"error message"| A2
+    B6 -->|"class, confidence,<br/>probabilities"| A3
+ 
+    style A1 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+    style A2 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+    style A3 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+    style B1 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+    style B2 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+    style B3 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+    style B4 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+    style B5 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+    style B6 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+```
+
+The interface and the model are two independently deployed services, a single POST /predict endpoint returns clean JSON, CORS-locked to the deployed frontend's own origin.
+ 
+```bash
+curl -X POST https://tumorsight-api.../predict \
+  -F "file=@scan.jpg"
+```
+ 
+```json
+{
+  "predicted_class": "meningioma",
+  "confidence": 0.958,
+  "probabilities": {
+    "meningioma": 0.958,
+    "glioma": 0.031,
+    "notumor": 0.009,
+    "pituitary": 0.002
+  }
+}
+```
+
+## 07 · Project structure
+
+Two independent services in one repository: a Python inference API and a React
+single-page app. Neither imports from the other, they meet only at `POST /predict`.
+
+```
+TumorSight/
+│
+├── backend/                                  Inference service — Docker → Azure Container Apps
+│   ├── app.py                                FastAPI app: model load, MRI validation, /predict
+│   ├── vgg16_tumor_model_95_accuracy.h5      Trained model, 175 MB, tracked via Git LFS
+│   ├── requirements.txt                      Pinned Python dependencies
+│   └── Dockerfile                            Container image for deployment
+│
+├── frontend/                                 Interface, Vite build → Vercel
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── Landing.jsx                   Hero, 3D brain, project overview
+│   │   │   ├── Demo.jsx                      Analysis console: upload → analyze → interpret
+│   │   │   └── About.jsx                     Model, metrics, and disclaimer
+│   │   ├── components/
+│   │   │   ├── BrainScene.jsx                Three.js scene, camera, and interaction
+│   │   │   ├── brainGeometry.js              Procedural brain, stands in while brain.glb loads
+│   │   │   ├── hologramMaterial.js           Custom emissive shader for the hologram look
+│   │   │   ├── brain.glb                     3D brain model
+│   │   │   ├── dataviz.jsx                   Confidence ring, probability bars, count-up
+│   │   │   ├── ui.jsx                        Logo, buttons, and shared primitives
+│   │   │   ├── Navbar.jsx                    Top navigation
+│   │   │   └── Footer.jsx                    Footer
+│   │   ├── assets/                           Logo lockup, mark, and profile image
+│   │   ├── theme.js                          Palette and per-class metadata
+│   │   ├── index.css                         Design tokens and component styles
+│   │   ├── App.jsx                           Routes
+│   │   └── main.jsx                          Entry point
+│   ├── vercel.json                           SPA rewrite, fixes 404 on refresh
+│   ├── vite.config.js                        Build config
+│   ├── tailwind.config.js                    Tailwind theme extension
+│   └── package.json                          Frontend dependencies and scripts
+│
+└── assets/                                   Screenshots used in this README
+```
+
+## 08 · Quick start
+
+**Installation**
+```bash
+cd backend
+python -m venv venv
+.\venv\Scripts\Activate.ps1        # or source venv/bin/activate on macOS/Linux
+pip install -r requirements.txt
+```
+
+**Configuration**
+```bash
+cd frontend
+npm install
+```
+
+**Run locally**
+```bash
+# backend
+python -m uvicorn app:app --reload --port 8000
+
+# frontend, in a second terminal
+cd frontend
+npm run dev
+```
+
+## 09 · Disclaimer
+
+TumorSight is a personal project. It is *not registered, cleared, or approved as a medical device*.
+
+
+---
+
+<div align="center">
+
+
+<img src="frontend/src/assets/logo-full.svg" alt="TumorSight" width="200" style="margin-left: -16px;" />
+
+**Designed & built by**
+
+**RENAD ALHARTHI**
+<br />
+Artificial Intelligence Engineer
+
+
+<a href="https://github.com/RenadAlh">
+<img src="https://img.shields.io/badge/GitHub-View_My_Other_Projects-712033?style=flat-square&logo=github" alt="GitHub Profile" />
+</a>
+
+</div>
+ 
