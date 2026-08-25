@@ -1,12 +1,12 @@
 <div align="center">
 
-<div style="margin-left: -20px;">
+<div style="margin-left: -22px;">
   <img src="frontend/src/assets/logo-full.svg" alt="TumorSight" width="360" />
 </div>
 
 
 
-<div style="margin-right: -15px;">
+<div style="margin-right: -3px;">
  <img src="assets/ts-tagline.svg" alt="TumorSight" width="450" />
 </div>
 <br />
@@ -140,7 +140,7 @@ flowchart LR
 </div>
  
  
->> **Recall is the primary metric.** 
+> **Recall is the primary metric.** 
 > In medical classification, missing a real tumor is more costly than a false positive, so the model prioritizes detecting actual tumor cases over overall accuracy.
 
 <br>
@@ -148,55 +148,15 @@ flowchart LR
 
 ## 05 · Tech stack
 
-<table>
-<tr>
-<td width="25%" valign="top" style="border: none;">
-<div style="background: #102523; border-radius: 8px; padding: 18px 18px; height: 100%; min-height: 210px; box-shadow: 0 0 26px -8px rgba(87,203,182,0.45);">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">Artificial Intelligence</div>
-<img src="https://img.shields.io/badge/Python-123634?style=flat-square&logo=python&logoColor=57cbb6" alt="Python" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/TensorFlow-123634?style=flat-square&logo=tensorflow&logoColor=57cbb6" alt="TensorFlow" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/Keras-123634?style=flat-square&logo=keras&logoColor=57cbb6" alt="Keras" style="margin: 2px 2px 2px 0;" />
-<div style="margin-top: 8px;"><a href="https://github.com/RenadAlh/VGG16TumorClassification"><img src="https://img.shields.io/badge/VGG16-123634?style=flat-square&logoColor=57cbb6" alt="VGG16" /></a></div>
-</div>
-</td>
-<td width="25%" valign="top" style="border: none;">
-<div style="background: #102523; border-radius: 8px; padding: 18px 18px; height: 100%; min-height: 210px; box-shadow: 0 0 26px -8px rgba(201,77,118,0.45);">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">Backend</div>
-<img src="https://img.shields.io/badge/FastAPI-431a2b?style=flat-square&logo=fastapi&logoColor=fdf7f2" alt="FastAPI" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/Docker-431a2b?style=flat-square&logo=docker&logoColor=fdf7f2" alt="Docker" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/Azure_Container_Apps-431a2b?style=flat-square&logo=microsoftazure&logoColor=fdf7f2" alt="Azure" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/Uvicorn-431a2b?style=flat-square&logoColor=fdf7f2" alt="Uvicorn" style="margin-top: 8px;" />
-<img src="https://img.shields.io/badge/SlowAPI-431a2b?style=flat-square&logoColor=fdf7f2" alt="SlowAPI" style="margin-top: 8px;" />
-</div>
-</td>
-<td width="25%" valign="top" style="border: none;">
-<div style="background: #102523; border-radius: 8px; padding: 18px 18px; height: 100%; min-height: 210px; box-shadow: 0 0 26px -8px rgba(255,171,122,0.4);">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">Frontend</div>
-<img src="https://img.shields.io/badge/React-7d2d5c?style=flat-square&logo=react&logoColor=ffab7a" alt="React" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/Vite-7d2d5c?style=flat-square&logo=vite&logoColor=ffab7a" alt="Vite" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/Three.js-7d2d5c?style=flat-square&logo=three.js&logoColor=ffab7a" alt="Three.js" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/Vercel-7d2d5c?style=flat-square&logo=vercel&logoColor=ffab7a" alt="Vercel" style="margin: 2px 2px 2px 0;" />
-<div style="margin-top: 8px;"><a href="https://www.tripo3d.ai"><img src="https://img.shields.io/badge/Tripo-7d2d5c?style=flat-square&logoColor=ffab7a" alt="Tripo" /></a></div>
-</div>
-</td>
-<td width="25%" valign="top" style="border: none;">
-<div style="background: #102523; border-radius: 8px; padding: 18px 18px; height: 100%; min-height: 210px; box-shadow: 0 0 26px -8px rgba(255,122,84,0.45);">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">Development</div>
-<img src="https://img.shields.io/badge/Git-ff7a54?style=flat-square&logo=git&logoColor=24100c" alt="Git" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/GitHub-ff7a54?style=flat-square&logo=github&logoColor=24100c" alt="GitHub" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/VS_Code-ff7a54?style=flat-square&logo=visualstudiocode&logoColor=24100c" alt="VS Code" style="margin: 2px 2px 2px 0;" />
-<img src="https://img.shields.io/badge/Cursor-ff7a54?style=flat-square&logoColor=24100c" alt="Cursor" style="margin: 2px 2px 2px 0;" />
-</div>
-</td>
-</tr>
-</table>
+<div align="center"> <img src="assets/ts-tech-stack.svg" alt="TumorSight features" width="850" /> </div>
+<br />
 
 <br>
 
 ## 06 · System
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': {'background':'#4b5563', 'primaryColor':'#431a2b', 'primaryTextColor':'#fdf7f2', 'primaryBorderColor':'#c94d76', 'lineColor':'#fdf7f2', 'textColor':'#fdf7f2'}}}%%
+%%{init: {'theme':'base', 'themeVariables': {'background':'#4c4c4c', 'primaryColor':'#123634', 'primaryTextColor':'#fdf7f2', 'primaryBorderColor':'#57cbb6', 'lineColor':'#fdf7f2', 'textColor':'#fdf7f2', 'fontSize':'12px', 'edgeLabelBackground':'#4c4c4c'}, 'flowchart': {'nodeSpacing': 20, 'rankSpacing': 30, 'subGraphTitleMargin': {'top': 12, 'bottom': 16}}}}%%
 flowchart TD
     subgraph Browser["Client — Vercel"]
         A1["Upload MRI slice"] --> A2["React interface"]
@@ -216,17 +176,24 @@ flowchart TD
     B3 -->|"error message"| A2
     B6 -->|"class, confidence,<br/>probabilities"| A3
  
-    style A1 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
-    style A2 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
-    style A3 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+    style Browser fill:#2a2a2a,stroke:#57cbb6,color:#fdf7f2
+    style API fill:#2a2a2a,stroke:#c94d76,color:#fdf7f2
+    style A1 fill:#123634,stroke:#57cbb6,color:#fdf7f2
+    style A2 fill:#123634,stroke:#57cbb6,color:#fdf7f2
+    style A3 fill:#123634,stroke:#57cbb6,color:#fdf7f2
     style B1 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
     style B2 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
     style B3 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
     style B4 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
     style B5 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
     style B6 fill:#431a2b,stroke:#c94d76,color:#fdf7f2
+ 
+    linkStyle default stroke-width:1px;
+    linkStyle 3 stroke:#ff7a54,color:#ff7a54,stroke-width:1px;
+    linkStyle 4 stroke:#57cbb6,color:#57cbb6,stroke-width:1px;
+    linkStyle 6 stroke:#ff7a54,color:#ff7a54,stroke-width:1px;
+    linkStyle 7 stroke:#57cbb6,color:#57cbb6,stroke-width:1px;
 ```
-
 The interface and the model are two independently deployed services, a single POST /predict endpoint returns clean JSON, CORS-locked to the deployed frontend's own origin.
  
 ```bash
@@ -246,6 +213,7 @@ curl -X POST https://tumorsight-api.../predict \
   }
 }
 ```
+<br>
 
 ## 07 · Project structure
 
@@ -325,7 +293,7 @@ TumorSight is a personal project. It is *not registered, cleared, or approved as
 <div align="center">
 
 
-<img src="frontend/src/assets/logo-full.svg" alt="TumorSight" width="200" style="margin-left: -16px;" />
+<img src="frontend/src/assets/logo-full.svg" alt="TumorSight" width="200" style="margin-left: -22px;" />
 
 **Designed & built by**
 
