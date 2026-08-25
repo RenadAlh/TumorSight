@@ -6,11 +6,32 @@
     <!-- Relative path so Vite fingerprints and copies it; an absolute /path
          would assume a public/ directory this project does not have. -->
     <link rel="icon" type="image/svg+xml" href="./src/assets/logo-mark.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta
       name="description"
       content="TumorSight, a VGG16-based brain tumor MRI classifier. Upload a scan, watch the model read it, and see the full confidence breakdown on an interactive 3D brain."
     />
     <meta name="theme-color" content="#0a1615" />
+
+    <!-- Link preview card -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tumorsight.vercel.app" />
+    <meta property="og:title" content="TumorSight — see the scan clearly" />
+    <meta
+      property="og:description"
+      content="A VGG16-based brain tumor MRI classifier. Upload a scan and see the full confidence breakdown on an interactive 3D brain."
+    />
+    <meta property="og:image" content="https://tumorsight.vercel.app/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TumorSight — see the scan clearly" />
+    <meta
+      name="twitter:description"
+      content="A VGG16-based brain tumor MRI classifier. Upload a scan and see the full confidence breakdown on an interactive 3D brain."
+    />
+    <meta name="twitter:image" content="https://tumorsight.vercel.app/og-image.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
