@@ -6,8 +6,8 @@
 
 
 
-<div style="color: #bf4677; font-size: 28px; font-weight: 700;">
-  Bringing Brain Tumors Into Sight
+<div style="margin-right: -15px;">
+ <img src="assets/ts-tagline.svg" alt="TumorSight" width="450" />
 </div>
 <br />
 <div>
@@ -83,69 +83,7 @@ TumorSight is designed as a responsive experience across desktop, tablet, and mo
 
 ## 03 · Features
  
-<table border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: none;">
-<tr>
-<td width="33%" valign="top" style="border: none;">
-<div style="background: #102523; border-left: 4px solid #ff7a54; border-radius: 8px; padding: 16px 18px; height: 100%;">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Full context, not one label</div>
-<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Every prediction includes the class, a confidence score, and the full probability breakdown across all four classes.</div>
-</div>
-</td>
-<td width="33%" valign="top" style="border: none;">
-<div style="background: #102523; border-left: 4px solid #c94d76; border-radius: 8px; padding: 16px 18px; height: 100%;">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Recall-optimized model</div>
-<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Tuned and evaluated on recall first, 95.48%, since missing a real tumor costs more than a false alarm.</div>
-</div>
-</td>
-<td width="33%" valign="top" style="border: none;">
-<div style="background: #102523; border-left: 4px solid #7d2d5c; border-radius: 8px; padding: 16px 18px; height: 100%;">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Interactive 3D brain</div>
-<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">A rotatable brain scene, built with Three.js, lives on the landing page as part of the interface itself.</div>
-</div>
-</td>
-</tr>
-<tr>
-<td width="33%" valign="top" style="border: none;">
-<div style="background: #102523; border-left: 4px solid #57cbb6; border-radius: 8px; padding: 16px 18px; height: 100%;">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Input validated first</div>
-<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Uploads are checked for grayscale MRI content before they ever reach the model, rejecting anything else.</div>
-</div>
-</td>
-<td width="33%" valign="top" style="border: none;">
-<div style="background: #102523; border-left: 4px solid #ff7a54; border-radius: 8px; padding: 16px 18px; height: 100%;">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Rate limited by design</div>
-<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Ten requests per minute per IP address, protecting the deployed model from casual abuse or overload.</div>
-</div>
-</td>
-<td width="33%" valign="top" style="border: none;">
-<div style="background: #102523; border-left: 4px solid #c94d76; border-radius: 8px; padding: 16px 18px; height: 100%;">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Privacy-first system</div>
-<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Scans are processed in memory for a single prediction only, never written to disk, logged, or retained anywhere.</div>
-</div>
-</td>
-</tr>
-<tr>
-<td width="33%" valign="top" style="border: none;">
-<div style="background: #102523; border-left: 4px solid #7d2d5c; border-radius: 8px; padding: 16px 18px; height: 100%;">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Built for real devices</div>
-<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">Desktop, tablet, and phone, portrait and landscape, are each tuned layouts, not one design squeezed to fit.</div>
-</div>
-</td>
-</td>
-<td width="33%" valign="top" style="border: none;">
-<div style="background: #102523; border-left: 4px solid #57cbb6; border-radius: 8px; padding: 16px 18px; height: 100%;">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Consistent, low latency</div>
-<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">The 175 MB model stays loaded in memory at all times, so every request returns a prediction quickly.</div>
-</div>
-</td>
-<td width="33%" valign="top" style="border: none;">
-<div style="background: #102523; border-left: 4px solid #ff7a54; border-radius: 8px; padding: 16px 18px; height: 100%;">
-<div style="color: #fdf7f2; font-weight: 700; font-size: 15px; margin-bottom: 6px;">Zero install required</div>
-<div style="color: #bcd2ce; font-size: 13px; line-height: 1.55;">No setup and no local model download, open the live demo in a browser and upload a scan to try it.</div>
-</div>
-</td>
-</tr>
-</table>
+<div align="center"> <img src="assets/ts-features.svg" alt="TumorSight features" width="850" /> </div>
 <br />
 
 
