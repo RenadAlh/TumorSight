@@ -26,7 +26,7 @@
 
 <div align="center">
 
-TumorSight combines a [VGG16-based model](https://github.com/RenadAlh/VGG16TumorClassification) with an interactive web interface to classify brain MRI slices and make the results easy to explore. Upload a scan, run the analysis, and see the prediction alongside its confidence and full probability breakdown.
+TumorSight combines a [VGG16-based model](https://github.com/RenadAlh/VGG16TumorClassification) with an interactive web interface to classify brain MRI slices into 4 classes: *Glioma · Meningioma · Pituitary · No Tumor* and make the results easy to explore. Upload a scan, run the analysis, and see the prediction alongside its confidence and full probability breakdown.
  
 
 ```
@@ -35,8 +35,6 @@ TumorSight combines a [VGG16-based model](https://github.com/RenadAlh/VGG16Tumor
    ▼                   ▼                      ▼
     MRI SLICE  ───▶  VGG16  +  SOFTMAX  ───▶   PREDICTION
 ```
- 
-**Glioma · Meningioma · Pituitary · No Tumor**
  
 
 https://github.com/user-attachments/assets/30219e45-9452-47d7-9ef8-87d55e661a92
@@ -227,9 +225,11 @@ TumorSight/
 │   ├── app.py                                FastAPI app: model load, MRI validation, /predict
 │   ├── vgg16_tumor_model_95_accuracy.h5      Trained model, 175 MB, tracked via Git LFS
 │   ├── requirements.txt                      Pinned Python dependencies
-│   └── Dockerfile                            Container image for deployment
+│   ├── Dockerfile                            Container image for deployment
+│   └── README.md                             Backend API docs and local run notes
 │
 ├── frontend/                                 Interface, Vite build → Vercel
+│   ├── public/                               Favicons and Open Graph image
 │   ├── src/
 │   │   ├── pages/
 │   │   │   ├── Landing.jsx                   Hero, 3D brain, project overview
@@ -252,6 +252,7 @@ TumorSight/
 │   ├── vercel.json                           SPA rewrite, fixes 404 on refresh
 │   ├── vite.config.js                        Build config
 │   ├── tailwind.config.js                    Tailwind theme extension
+│   ├── postcss.config.js                     PostCSS + Tailwind pipeline
 │   └── package.json                          Frontend dependencies and scripts
 │
 └── assets/                                   Images used in this README
