@@ -81,7 +81,7 @@ export default function Landing() {
 
             <Reveal delay={330} className="hero-stats-row lg:flex lg:flex-wrap lg:items-center lg:gap-x-7 lg:gap-y-3 lg:pt-2">
               {[
-                ["95.48%", "Recall"],
+                ["96.99%", "Recall"],
                 ["4", "Classes"],
                 ["1", "MRI → Diagnosis"],
               ].map(([v, l]) => (

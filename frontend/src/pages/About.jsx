@@ -203,7 +203,7 @@ export default function About() {
           </div>
 
           <Reveal delay={200} className="mt-8 flex justify-center">
-            <span className="chip chip-warm">Overall test accuracy · 95.48%</span>
+            <span className="chip chip-warm">Overall test accuracy · 96.99%</span>
           </Reveal>
         </Shell>
       </Band>

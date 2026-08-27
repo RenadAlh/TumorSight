@@ -93,7 +93,7 @@ export const CLASS_INFO = {
 
 /** Held-out test-set metrics from the VGG16TumorClassification notebook. */
 export const METRICS = [
-  { label: "Precision", value: 95.54, note: "Of the scans it flags for a class, how many belong there." },
-  { label: "Recall", value: 95.48, note: "Of the scans in a class, how many it successfully finds." },
-  { label: "F1-score", value: 95.45, note: "The harmonic mean, the single headline number." },
+  { label: "Precision", value: 96.99, note: "Of the scans it flags for a class, how many belong there." },
+  { label: "Recall", value: 96.99, note: "Of the scans in a class, how many it successfully finds." },
+  { label: "F1-score", value: 96.97, note: "The harmonic mean, the single headline number." },
 ];

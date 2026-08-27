@@ -37,7 +37,7 @@ TumorSight combines a [VGG16-based model](https://github.com/RenadAlh/VGG16Tumor
 ```
  
 
-https://github.com/user-attachments/assets/30219e45-9452-47d7-9ef8-87d55e661a92
+https://github.com/user-attachments/assets/2cb80531-203c-43d6-ba1b-5b3a421d69f6
  
 <sub>Explore TumorSight end to end! landing, analysis, and about.</sub>
  
@@ -122,16 +122,16 @@ flowchart LR
     <th width="300"><div align="center">Value</div></th>
   </tr>
   <tr>
-    <td><div align="center"><strong>Recall</strong></div></td>
-    <td><div align="center"><strong>95.48%</strong></div></td>
+    <td><div align="center"><strong>Marcro Recall</strong></div></td>
+    <td><div align="center"><strong>96.99%</strong></div></td>
   </tr>
   <tr>
-    <td><div align="center">Precision</div></td>
-    <td><div align="center">95.54%</div></td>
+    <td><div align="center">Marcro Precision</div></td>
+    <td><div align="center">96.99%</div></td>
   </tr>
   <tr>
-    <td><div align="center">F1-score</div></td>
-    <td><div align="center">95.45%</div></td>
+    <td><div align="center">Marcro F1-score</div></td>
+    <td><div align="center">96.97%</div></td>
   </tr>
 </table>
 
@@ -223,7 +223,7 @@ TumorSight/
 │
 ├── backend/                                  Inference service, Docker → Azure Container Apps
 │   ├── app.py                                FastAPI app: model load, MRI validation, /predict
-│   ├── vgg16_tumor_model_95_accuracy.h5      Trained model, 175 MB, tracked via Git LFS
+│   ├── vgg16_tumor_model_97_recall.h5      Trained model, 175 MB, tracked via Git LFS
 │   ├── requirements.txt                      Pinned Python dependencies
 │   ├── Dockerfile                            Container image for deployment
 │   └── README.md                             Backend API docs and local run notes

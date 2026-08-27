@@ -1,7 +1,7 @@
 """
 Brain Tumor MRI Classifier API
 -------------------------------
-Serves the VGG16-based classifier (vgg16_tumor_model_95_accuracy.h5) behind
+Serves the VGG16-based classifier (vgg16_tumor_model_97_recall.h5) behind
 a single POST /predict endpoint. Built to match the exact architecture and
 preprocessing used in BrainTumorClassification_VGG16_.ipynb:
 
@@ -23,7 +23,7 @@ from slowapi.util import get_remote_address
 from tensorflow.keras.models import load_model
 
 # --- Config -----------------------------------------------------------
-MODEL_PATH = os.environ.get("MODEL_PATH", "vgg16_tumor_model_95_accuracy.h5")
+MODEL_PATH = os.environ.get("MODEL_PATH", "vgg16_tumor_model_97_recall.h5")
 IMG_SIZE = (224, 224)
 CLASS_NAMES = ["glioma", "meningioma", "notumor", "pituitary"]
 

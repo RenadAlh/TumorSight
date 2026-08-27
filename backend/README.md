@@ -7,10 +7,10 @@ FastAPI service that serves a VGG16-based brain tumor MRI classifier behind a si
 | | |
 |---|---|
 | Model | VGG16 (ImageNet-pretrained base, fine-tuned head) |
-| Test accuracy | 95.4% |
-| Precision | 95.54% |
-| Recall | 95.48% |
-| F1-score | 95.45% |
+| Test accuracy | 96.99% |
+| Precision | 96.99% |
+| Recall | 96.99% |
+| F1-score | 96.97% |
 | Input | 224x224 RGB image |
 | Output classes | `glioma`, `meningioma`, `notumor`, `pituitary` |
 | Rate limit | 10 requests/minute per IP |
@@ -77,7 +77,7 @@ pip install -r requirements.txt
 uvicorn app:app --reload --port 8000
 ```
 
-The model file (`vgg16_tumor_model_95_accuracy.h5`) needs to be in this directory, it's what `MODEL_PATH` points to by default. Test it:
+The model file (`vgg16_tumor_model_97_recall.h5`) needs to be in this directory, it's what `MODEL_PATH` points to by default. Test it:
 
 ```bash
 curl -X POST http://localhost:8000/predict -F "file=@scan.jpg"

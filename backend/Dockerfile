@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
-COPY vgg16_tumor_model_95_accuracy.h5 .
+COPY vgg16_tumor_model_97_recall.h5 .
 
 # Default port for local runs; Azure Container Apps is told to target 8080 explicitly at deploy time
 ENV PORT=8080
